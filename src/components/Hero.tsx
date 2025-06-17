@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, Calendar, BookOpen } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
+import HeroCarousel from './HeroCarousel';
 
 const Hero = () => {
   const ref = useScrollAnimation<HTMLDivElement>();
@@ -17,8 +18,9 @@ const Hero = () => {
       ref={ref}
       className="scroll-animation bg-gradient-to-br from-olive-green to-sky-blue min-h-screen flex items-center"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+        <div className="flex flex-col-reverse md:flex-row items-center md:space-x-12">
+          <div className="text-center md:text-left md:w-1/2">
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
             Bienvenidos a
             <br />
@@ -64,6 +66,11 @@ const Hero = () => {
               <h3 className="text-2xl font-bold text-white mb-4">Progreso</h3>
               <p className="text-cream">Avanzamos hacia un futuro próspero</p>
             </div>
+          </div>
+          </div>
+
+          <div className="mb-10 md:mb-0 md:w-1/2 w-full">
+            <HeroCarousel />
           </div>
         </div>
       </div>

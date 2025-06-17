@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, Facebook, MessageSquare, ExternalLink } from 'lucide-react';
+import useScrollAnimation from '../hooks/useScrollAnimation';
 
 const Contacto = () => {
+  const ref = useScrollAnimation<HTMLDivElement>();
   const [formData, setFormData] = useState({
     nombre: '',
     email: '',
@@ -51,7 +53,7 @@ const Contacto = () => {
   };
 
   return (
-    <div className="py-20 bg-cream bg-opacity-80">
+    <div ref={ref} className="scroll-animation py-20 bg-cream bg-opacity-80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="flex justify-center mb-6">

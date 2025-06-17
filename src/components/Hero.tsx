@@ -1,7 +1,10 @@
 import React from 'react';
 import { ArrowRight, Calendar, BookOpen } from 'lucide-react';
+import useScrollAnimation from '../hooks/useScrollAnimation';
 
 const Hero = () => {
+  const ref = useScrollAnimation<HTMLDivElement>();
+
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -10,7 +13,10 @@ const Hero = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-olive-green to-sky-blue min-h-screen flex items-center">
+    <div
+      ref={ref}
+      className="scroll-animation bg-gradient-to-br from-olive-green to-sky-blue min-h-screen flex items-center"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">

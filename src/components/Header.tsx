@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
     { name: 'Inicio', href: '#inicio' },
@@ -14,8 +24,7 @@ const Header = () => {
     { name: 'Contáctanos', href: '#contacto' },
   ];
 
-
-  const scrollToSection = (href: string) => {
+  const scrollToSection = (href) => {
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -25,7 +34,11 @@ const Header = () => {
 
   return (
     <header
-      className="sticky top-0 z-50 transition-all duration-300 bg-olive-green bg-opacity-50 backdrop-blur-md"
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-olive-green bg-opacity-90 backdrop-blur-md shadow-lg'
+          : 'bg-olive-green bg-opacity-50 backdrop-blur-md'
+      }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
@@ -39,7 +52,6 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="hidden lg:flex space-x-8">
             {navItems.map((item) => (
               <button
@@ -52,7 +64,6 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Mobile Menu Button */}
           <button
             className="lg:hidden text-white p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -61,7 +72,6 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="lg:hidden bg-olive-green bg-opacity-95 backdrop-blur-md border-t border-sky-blue border-opacity-30">
             <nav className="py-4 space-y-2">

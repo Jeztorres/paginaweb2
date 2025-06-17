@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Bell, Calendar, Info, X, Mail, CheckCircle } from 'lucide-react';
+import useScrollAnimation from '../hooks/useScrollAnimation';
 
 interface Anuncio {
   id: number;
@@ -13,6 +14,7 @@ interface Anuncio {
 }
 
 const Anuncios = () => {
+  const ref = useScrollAnimation<HTMLDivElement>();
   const [modalAbierto, setModalAbierto] = useState(false);
   const [anuncioSeleccionado, setAnuncioSeleccionado] = useState<Anuncio | null>(null);
   const [emailSuscripcion, setEmailSuscripcion] = useState('');
@@ -74,7 +76,10 @@ const Anuncios = () => {
   };
 
   return (
-    <div className="py-20 bg-gradient-to-br from-cream to-white bg-opacity-80">
+    <div
+      ref={ref}
+      className="scroll-animation py-20 bg-gradient-to-br from-cream to-white bg-opacity-80"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="flex justify-center mb-6">

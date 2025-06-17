@@ -1,9 +1,11 @@
 import React from 'react';
 import { Clock, MapPin, Users, Book } from 'lucide-react';
+import useScrollAnimation from '../hooks/useScrollAnimation';
 
 const Historia = () => {
+  const ref = useScrollAnimation<HTMLDivElement>();
   return (
-    <div className="py-20 bg-cream">
+    <div ref={ref} className="scroll-animation py-20 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-bold text-olive-green mb-6">Nuestra Historia</h2>

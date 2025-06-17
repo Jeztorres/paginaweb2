@@ -1,5 +1,6 @@
 import React from 'react';
 import { Calendar, MapPin, Clock, Music } from 'lucide-react';
+import useScrollAnimation from '../hooks/useScrollAnimation';
 
 interface Evento {
   id: number;
@@ -12,6 +13,7 @@ interface Evento {
 }
 
 const Eventos = () => {
+  const ref = useScrollAnimation<HTMLDivElement>();
   const eventos: Evento[] = [
     {
       id: 1,
@@ -79,7 +81,7 @@ const Eventos = () => {
   ];
 
   return (
-    <div className="py-20 bg-olive-green">
+    <div ref={ref} className="scroll-animation py-20 bg-olive-green">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="flex justify-center mb-6">

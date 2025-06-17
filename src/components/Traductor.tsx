@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Languages, ArrowRightLeft, Volume2, Copy } from 'lucide-react';
+import useScrollAnimation from '../hooks/useScrollAnimation';
 
 const Traductor = () => {
+  const ref = useScrollAnimation<HTMLDivElement>();
   const [textoEspanol, setTextoEspanol] = useState('');
   const [textoHnahnu, setTextoHnahnu] = useState('');
   const [direccion, setDireccion] = useState<'esp-hna' | 'hna-esp'>('esp-hna');
@@ -81,7 +83,10 @@ const Traductor = () => {
   ];
 
   return (
-    <div className="py-20 bg-gradient-to-br from-sky-blue to-olive-green">
+    <div
+      ref={ref}
+      className="scroll-animation py-20 bg-gradient-to-br from-sky-blue to-olive-green"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="flex justify-center mb-6">

@@ -33,11 +33,13 @@ const Header = () => {
   };
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-olive-green bg-opacity-90 backdrop-blur-md shadow-lg' 
-        : 'bg-olive-green bg-opacity-70 backdrop-blur-sm'
-    }`}>
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-olive-green bg-opacity-90 backdrop-blur-md shadow-lg'
+          : 'bg-transparent'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-3">

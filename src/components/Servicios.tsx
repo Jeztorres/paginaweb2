@@ -1,5 +1,6 @@
 import React from 'react';
 import { Phone, Globe, Mail, GraduationCap, Heart, Droplets, Users, Clock, MapPin } from 'lucide-react';
+import useScrollAnimation from '../hooks/useScrollAnimation';
 
 interface Servicio {
   id: number;
@@ -17,6 +18,7 @@ interface Servicio {
 }
 
 const Servicios = () => {
+  const ref = useScrollAnimation<HTMLDivElement>();
   const servicios: Servicio[] = [
     {
       id: 1,
@@ -163,7 +165,7 @@ const Servicios = () => {
   };
 
   return (
-    <div className="py-20 bg-cream bg-opacity-80">
+    <div ref={ref} className="scroll-animation py-20 bg-cream bg-opacity-80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="flex justify-center mb-6">

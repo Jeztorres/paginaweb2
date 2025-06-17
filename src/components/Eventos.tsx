@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, MapPin, Clock, Music } from 'lucide-react';
+import { Calendar, Music } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 
 interface Evento {
@@ -20,7 +20,7 @@ const Eventos = () => {
       nombre: "Fiesta de la Santa Cruz",
       fecha: "3 de Mayo",
       descripcion: "Celebración en el cerro Xitphe con bendición de cruces, danzas autóctonas y un ambiente de fe y tradición que une a la comunidad.",
-      imagen: "https://images.pexels.com/photos/8353618/pexels-photo-8353618.jpeg?auto=compress&cs=tinysrgb&w=800",
+      imagen: "/eventos/evento1.jpg",
       ubicacion: "Cerro Xitphe",
       hora: "Todo el día"
     },
@@ -29,7 +29,7 @@ const Eventos = () => {
       nombre: "Conmemoración Ejidal",
       fecha: "15 de Mayo",
       descripcion: "Desfile de tractores, música de banda y actos cívicos para recordar la entrega de parcelas de 1925; encuentro fraterno entre ejidatarios y familias.",
-      imagen: "https://images.pexels.com/photos/1656663/pexels-photo-1656663.jpeg?auto=compress&cs=tinysrgb&w=800",
+      imagen: "/eventos/evento2.jpg",
       ubicacion: "Centro de Patria Nueva",
       hora: "9:00 AM - 6:00 PM"
     },
@@ -38,7 +38,7 @@ const Eventos = () => {
       nombre: "Feria a \"La Preciosa Sangre de Cristo\"",
       fecha: "1 de Julio",
       descripcion: "Feria patronal con charreadas, jaripeo nocturno, juegos mecánicos, bailes populares y espectáculos de fuegos artificiales. Diversión familiar asegurada.",
-      imagen: "https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=800",
+      imagen: "/eventos/evento3.jpg",
       ubicacion: "Centro de Patria Nueva",
       hora: "Todo el día"
     },
@@ -47,7 +47,7 @@ const Eventos = () => {
       nombre: "Grito de Independencia",
       fecha: "15 de Septiembre",
       descripcion: "Verbena cívica con música, luces y pirotecnia que enciende el orgullo patrio y fortalece el sentido de comunidad.",
-      imagen: "https://images.pexels.com/photos/1303081/pexels-photo-1303081.jpeg?auto=compress&cs=tinysrgb&w=800",
+      imagen: "/eventos/evento4.jpg",
       ubicacion: "Plaza Principal",
       hora: "7:00 PM - 12:00 AM"
     },
@@ -56,7 +56,7 @@ const Eventos = () => {
       nombre: "Día de Muertos",
       fecha: "1 y 2 de Noviembre",
       descripcion: "Ofrendas, altares y visita a los panteones para honrar a nuestros seres queridos.",
-      imagen: "https://images.pexels.com/photos/3692073/pexels-photo-3692073.jpeg?auto=compress&cs=tinysrgb&w=800",
+      imagen: "/eventos/evento5.jpg",
       ubicacion: "Panteón y hogares",
       hora: "Todo el día"
     },
@@ -65,7 +65,7 @@ const Eventos = () => {
       nombre: "Encendido del Árbol",
       fecha: "Principios de Diciembre",
       descripcion: "Arranque oficial de la temporada navideña con luces, villancicos y un ambiente familiar que ilumina todo el corazón de Patria Nueva.",
-      imagen: "https://images.pexels.com/photos/1303081/pexels-photo-1303081.jpeg?auto=compress&cs=tinysrgb&w=800",
+      imagen: "/eventos/evento6.jpg",
       ubicacion: "Plaza Principal",
       hora: "6:00 PM - 9:00 PM"
     },
@@ -74,7 +74,7 @@ const Eventos = () => {
       nombre: "Feria a \"La Virgen María de Guadalupe\"",
       fecha: "10-12 de Diciembre",
       descripcion: "Festejo guadalupano con misas solemnes, danzas populares y espectáculos artísticos que reafirman nuestra fe y cultura.",
-      imagen: "https://images.pexels.com/photos/1682497/pexels-photo-1682497.jpeg?auto=compress&cs=tinysrgb&w=800",
+      imagen: "/eventos/evento7.jpg",
       ubicacion: "Iglesia y Plaza",
       hora: "Variable"
     }
@@ -116,17 +116,7 @@ const Eventos = () => {
                   {evento.descripcion}
                 </p>
                 
-                <div className="space-y-2 text-sm text-gray-500">
-                  <div className="flex items-center">
-                    <MapPin size={16} className="mr-2 text-terracota" />
-                    <span>{evento.ubicacion}</span>
-                  </div>
-                  
-                  <div className="flex items-center">
-                    <Clock size={16} className="mr-2 text-terracota" />
-                    <span>{evento.hora}</span>
-                  </div>
-                </div>
+                {/* Se omite ubicación y horario según solicitud */}
                 
                 <div className="mt-4 pt-4 border-t border-gray-200">
                   <div className="flex items-center justify-between">

@@ -137,9 +137,9 @@ const Anuncios = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
           {anuncios.map((anuncio) => (
-            <div key={anuncio.id} className="bg-white bg-opacity-95 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div key={anuncio.id} className="bg-white bg-opacity-95 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-full max-w-md mx-auto">
               <div className="relative h-48">
                 <img 
                   src={anuncio.imagen} 

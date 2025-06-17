@@ -22,16 +22,11 @@ const Contacto = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí iría la lógica para enviar el formulario
-    console.log('Formulario enviado:', formData);
-    alert('¡Gracias por tu mensaje! Te contactaremos pronto.');
-    setFormData({
-      nombre: '',
-      email: '',
-      telefono: '',
-      asunto: '',
-      mensaje: ''
-    });
+    const body = `Nombre: ${formData.nombre}%0A` +
+      `Teléfono: ${formData.telefono}%0A%0A${formData.mensaje}`;
+    const mailto = `mailto:contacto@patrianueva.gob.mx?subject=${encodeURIComponent(formData.asunto)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+    setFormData({ nombre: '', email: '', telefono: '', asunto: '', mensaje: '' });
   };
 
   const abrirMapa = () => {
@@ -279,17 +274,12 @@ const Contacto = () => {
             Para emergencias o asuntos urgentes, puedes contactar directamente a nuestras autoridades locales 
             o visitar nuestras oficinas en el horario de atención al público.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <div className="bg-white bg-opacity-20 px-6 py-3 rounded-full">
-              <span className="font-semibold">Emergencias: 911</span>
-            </div>
-            <div className="bg-white bg-opacity-20 px-6 py-3 rounded-full">
-              <span className="font-semibold">Atención Ciudadana</span>
-            </div>
-            <div className="bg-white bg-opacity-20 px-6 py-3 rounded-full">
-              <span className="font-semibold">Servicios 24/7</span>
-            </div>
-          </div>
+          <button
+            onClick={() => window.open('tel:911', '_self')}
+            className="bg-white bg-opacity-20 hover:bg-opacity-30 px-6 py-3 rounded-full font-semibold"
+          >
+            Emergencias: 911
+          </button>
         </div>
       </div>
     </div>

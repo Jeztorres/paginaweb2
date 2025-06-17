@@ -37,7 +37,7 @@ const Servicios = () => {
         "Programas técnicos especializados"
       ],
       categoria: 'educacion',
-      imagen: "https://images.pexels.com/photos/1181533/pexels-photo-1181533.jpeg?auto=compress&cs=tinysrgb&w=800"
+      imagen: "/servicios/servicio1.jpg"
     },
     {
       id: 2,
@@ -55,7 +55,7 @@ const Servicios = () => {
         "Programas de emprendimiento"
       ],
       categoria: 'educacion',
-      imagen: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800"
+      imagen: "/servicios/servicio2.jpg"
     },
     {
       id: 3,
@@ -73,7 +73,7 @@ const Servicios = () => {
         "Preparación para el futuro"
       ],
       categoria: 'educacion',
-      imagen: "https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=800"
+      imagen: "/servicios/servicio3.jpg"
     },
     {
       id: 4,
@@ -89,7 +89,7 @@ const Servicios = () => {
         "Bases sólidas para el futuro"
       ],
       categoria: 'educacion',
-      imagen: "https://images.pexels.com/photos/8613089/pexels-photo-8613089.jpeg?auto=compress&cs=tinysrgb&w=800"
+      imagen: "/servicios/servicio4.jpg"
     },
     {
       id: 5,
@@ -105,7 +105,7 @@ const Servicios = () => {
         "Bases para un futuro brillante"
       ],
       categoria: 'educacion',
-      imagen: "https://images.pexels.com/photos/8613092/pexels-photo-8613092.jpeg?auto=compress&cs=tinysrgb&w=800"
+      imagen: "/servicios/servicio5.jpg"
     },
     {
       id: 6,
@@ -121,7 +121,7 @@ const Servicios = () => {
         "Servicios de salud comunitaria"
       ],
       categoria: 'salud',
-      imagen: "https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&cs=tinysrgb&w=800"
+      imagen: "/servicios/servicio6.jpg"
     },
     {
       id: 7,
@@ -137,7 +137,7 @@ const Servicios = () => {
         "Compromiso con la salud comunitaria"
       ],
       categoria: 'basicos',
-      imagen: "https://images.pexels.com/photos/416528/pexels-photo-416528.jpeg?auto=compress&cs=tinysrgb&w=800"
+      imagen: "/servicios/servicio7.jpg"
     }
   ];
 
@@ -270,17 +270,12 @@ const Servicios = () => {
             Si requieres asistencia adicional o tienes preguntas sobre cualquiera de nuestros servicios, 
             no dudes en contactar a las autoridades locales o visitar nuestras oficinas comunitarias.
           </p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <div className="bg-white bg-opacity-20 px-4 py-2 rounded-full">
-              Atención Ciudadana
-            </div>
-            <div className="bg-white bg-opacity-20 px-4 py-2 rounded-full">
-              Servicios de Calidad
-            </div>
-            <div className="bg-white bg-opacity-20 px-4 py-2 rounded-full">
-              Apoyo Comunitario
-            </div>
-          </div>
+          <button
+            onClick={() => window.open('tel:+527712345677', '_self')}
+            className="mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 px-6 py-3 rounded-full text-sm font-semibold transition-colors"
+          >
+            Llamar a delegación
+          </button>
         </div>
       </div>
     </div>

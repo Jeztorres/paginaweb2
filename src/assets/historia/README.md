@@ -1,1 +1,1 @@
-Place two images for the Historia section here.
+Place two images (jpg, jpeg, png, webp) here for the Historia section gallery.

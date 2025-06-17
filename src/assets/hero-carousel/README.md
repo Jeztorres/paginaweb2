@@ -1,1 +1,1 @@
-Place images for the hero carousel in this folder.
+Add your images (jpg, jpeg, png, webp) here to include them in the hero carousel.

@@ -25,7 +25,15 @@ const Header = () => {
 
   return (
     <header
+34h8r3-codex/añadir-carrusel-de-imágenes-y-eliminar-cuadro--patria-nueva
       className="sticky top-0 z-50 transition-all duration-300 bg-transparent backdrop-blur-md"
+
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-olive-green bg-opacity-90 backdrop-blur-md shadow-lg'
+          : 'bg-olive-green bg-opacity-50 backdrop-blur-md'
+      }`}
+      main
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">

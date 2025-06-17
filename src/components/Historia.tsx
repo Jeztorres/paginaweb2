@@ -2,6 +2,13 @@ import React from 'react';
 import { Clock, MapPin, Users, Book } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 
+const historiaImages = Object.values(
+  import.meta.glob('../assets/historia/*.{jpg,jpeg,png,webp}', {
+    eager: true,
+    as: 'url',
+  })
+) as string[];
+
 const Historia = () => {
   const ref = useScrollAnimation<HTMLDivElement>();
   return (
@@ -97,15 +104,15 @@ const Historia = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
-              <div className="h-64 bg-gradient-to-r from-terracota to-olive-green flex items-center justify-center">
-                <div className="text-center text-white">
-                  <MapPin size={48} className="mx-auto mb-4" />
-                  <p className="text-lg font-semibold">Patria Nueva</p>
-                  <p className="text-sm opacity-90">Antiguamente Barrio del Capulín</p>
-                  <p className="text-xs opacity-75 mt-2">Santiago de Anaya, Hidalgo</p>
-                </div>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {historiaImages.map((src, idx) => (
+                <img
+                  key={idx}
+                  src={src}
+                  alt={`Historia ${idx + 1}`}
+                  className="w-full h-48 object-cover rounded-2xl shadow-md"
+                />
+              ))}
             </div>
           </div>
         </div>

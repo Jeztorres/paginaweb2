@@ -134,8 +134,8 @@ const Anuncios: React.FC = () => {
           </div>
           <h2 className="text-5xl font-bold text-olive-green mb-6">Anuncios Importantes</h2>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
-            Mantente informado sobre las noticias y desarrollos más importantes de nuestra
-            comunidad.
+              <div className="relative h-64 flex items-center justify-center bg-white">
+                  className="max-h-full max-w-full object-contain"
           </p>
 
           {/* Botón de suscripción */}

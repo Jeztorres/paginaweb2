@@ -20,14 +20,14 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className }) => {
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl ${className ?? ''}`.trim()}
+      className={`relative flex items-center justify-center overflow-hidden rounded-2xl ${className ?? ''}`.trim()}
     >
       {images.map((src, i) => (
         <img
           key={i}
           src={src}
           alt={`Imagen carrusel ${i + 1}`}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-700 ${
             i === index ? 'opacity-100' : 'opacity-0'
           }`}
         />

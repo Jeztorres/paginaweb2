@@ -31,6 +31,14 @@ const Anuncios = () => {
     })
   ) as string[];
 
+  // Cargar imagen de portada para el anuncio 1 (estática)
+  const anuncio1Portada = Object.values(
+    import.meta.glob('../assets/anuncios-portada/anuncio1/*.{jpg,jpeg,png,webp}', {
+      eager: true,
+      as: 'url'
+    })
+  ) as string[];
+
   const anuncios: Anuncio[] = [
     {
       id: 1,
@@ -38,7 +46,7 @@ const Anuncios = () => {
       resumen: "¡La fiesta más grande del año! Tradición que late con fuerza en el corazón del Mezquital.",
       fecha: "1 de Julio, 2025",
       categoria: "Feria Patronal",
-      imagen: anuncio1Images[0] || "",
+      imagen: anuncio1Portada[0] || anuncio1Images[0] || "",
       imagenes: anuncio1Images,
       contenidoCompleto: "¡La fiesta más grande del año! Tradición que late con fuerza: coronación de la reina, bailes populares y ambiente familiar en el corazón del Mezquital. ¡Nos vemos en la feria!",
       detalles: [

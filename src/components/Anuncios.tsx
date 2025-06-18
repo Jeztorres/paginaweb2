@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Bell, Calendar, Info, X, Mail, CheckCircle } from 'lucide-react';
+import ImageCarousel from './ImageCarousel';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 
 interface Anuncio {
@@ -9,6 +10,7 @@ interface Anuncio {
   fecha: string;
   categoria: string;
   imagen: string;
+  imagenes?: string[];
   contenidoCompleto: string;
   detalles?: string[];
 }
@@ -21,6 +23,14 @@ const Anuncios = () => {
   const [suscripcionExitosa, setSuscripcionExitosa] = useState(false);
   const [mostrarSuscripcion, setMostrarSuscripcion] = useState(false);
 
+  // Cargar imágenes del carrusel para el anuncio 1
+  const anuncio1Images = Object.values(
+    import.meta.glob('../assets/anuncios-carousel/anuncio1/*.{jpg,jpeg,png,webp}', {
+      eager: true,
+      as: 'url'
+    })
+  ) as string[];
+
   const anuncios: Anuncio[] = [
     {
       id: 1,
@@ -28,7 +38,8 @@ const Anuncios = () => {
       resumen: "¡La fiesta más grande del año! Tradición que late con fuerza en el corazón del Mezquital.",
       fecha: "1 de Julio, 2025",
       categoria: "Feria Patronal",
-      imagen: "https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=800",
+      imagen: anuncio1Images[0] || "",
+      imagenes: anuncio1Images,
       contenidoCompleto: "¡La fiesta más grande del año! Tradición que late con fuerza: coronación de la reina, bailes populares y ambiente familiar en el corazón del Mezquital. ¡Nos vemos en la feria!",
       detalles: [
         "Ubicación: Centro de Patria Nueva, Santiago de Anaya, Hidalgo",
@@ -180,12 +191,11 @@ const Anuncios = () => {
         {/* Modal */}
         {modalAbierto && anuncioSeleccionado && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="relative">
-                <img 
-                  src={anuncioSeleccionado.imagen} 
-                  alt={anuncioSeleccionado.titulo}
-                  className="w-full h-64 object-cover rounded-t-2xl"
+                <ImageCarousel
+                  images={anuncioSeleccionado.imagenes || [anuncioSeleccionado.imagen]}
+                  className="w-full h-64 md:h-96"
                 />
                 <button
                   onClick={cerrarModal}
@@ -197,7 +207,7 @@ const Anuncios = () => {
                   {anuncioSeleccionado.categoria}
                 </div>
               </div>
-              
+
               <div className="p-8">
                 <div className="flex items-center text-sm text-gray-500 mb-4">
                   <Calendar size={16} className="mr-2" />

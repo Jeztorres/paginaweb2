@@ -1,186 +1,191 @@
+// components/Header.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X } from 'lucide-react'; // Asegúrate de tener 'lucide-react' instalado
+import { Menu, X } from 'lucide-react';
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+interface NavItem {
+  name: string;
+  href: string;
+}
 
-  // Referencia para el contenedor del menú para cerrar al hacer clic fuera
-  const menuRef = useRef(null);
-  // Referencia para el botón de menú para evitar cerrarlo al hacer clic en él
-  const menuButtonRef = useRef(null);
+const navItems: NavItem[] = [
+  { name: 'Inicio', href: '#inicio' },
+  { name: 'Historia', href: '#historia' },
+  { name: 'Anuncios', href: '#anuncios' },
+  { name: 'Eventos', href: '#eventos' },
+  { name: 'Servicios', href: '#servicios' },
+  { name: 'Traductor', href: '#traductor' },
+  { name: 'Contáctanos', href: '#contacto' },
+];
 
+const Header: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState<string>('#inicio');
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  /* ---------- 1.  Resaltar sección activa al hacer scroll ---------- */
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const sections = navItems
+      .map(i => document.querySelector<HTMLElement>(i.href))
+      .filter(Boolean) as HTMLElement[];
 
-    const handleClickOutside = (event) => {
-      // Si el menú está abierto y el clic no fue dentro del menú ni en el botón que lo abre
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setActive(`#${entry.target.id}`);
+          }
+        });
+      },
+      { rootMargin: '-40% 0px -50% 0px', threshold: 0 },
+    );
+
+    sections.forEach(s => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+
+  /* ---------- 2.  Cerrar con clic fuera o ESC ---------- */
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (
-        isMenuOpen &&
+        menuOpen &&
         menuRef.current &&
-        !menuRef.current.contains(event.target) &&
-        menuButtonRef.current &&
-        !menuButtonRef.current.contains(event.target)
+        !menuRef.current.contains(e.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(e.target as Node)
       ) {
-        setIsMenuOpen(false);
+        setMenuOpen(false);
       }
     };
+    const handleEsc = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false);
 
-    window.addEventListener('scroll', handleScroll);
-    document.addEventListener('mousedown', handleClickOutside); // Escucha clics en todo el documento
-
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEsc);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEsc);
     };
-  }, [isMenuOpen]);
+  }, [menuOpen]);
 
+  /* ---------- 3.  Bloquear scroll cuando el panel está abierto ---------- */
   useEffect(() => {
-    // Cuando el menú se abre, evita que el scroll del cuerpo de la página funcione
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-      // Agrega una clase al body para aplicar un filtro de desenfoque al fondo (opcional, si se prefiere no usar el backdrop-div)
-      // document.body.classList.add('blur-background-body');
-    } else {
-      document.body.style.overflow = 'unset';
-      // document.body.classList.remove('blur-background-body');
-    }
+    document.body.style.overflow = menuOpen ? 'hidden' : 'unset';
     return () => {
       document.body.style.overflow = 'unset';
-      // document.body.classList.remove('blur-background-body');
     };
-  }, [isMenuOpen]);
+  }, [menuOpen]);
 
-  // Definición de los ítems de navegación.
-  const navItems = [
-    { name: 'Inicio', href: '#inicio' },
-    { name: 'Historia', href: '#historia' },
-    { name: 'Anuncios Importantes', href: '#anuncios' },
-    { name: 'Eventos', href: '#eventos' },
-    { name: 'Servicios', href: '#servicios' },
-    { name: 'Traductor', href: '#traductor' },
-    { name: 'Contáctanos', href: '#contacto' },
-  ];
-
-  /**
-   * Desplaza la vista a la sección especificada por el href.
-   * @param {string} href El selector CSS de la sección a la que se desea desplazar.
-   */
-  const scrollToSection = (href: string) => {
-    if (typeof href === 'string' && href.trim() !== '') {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        console.warn(`La sección con el ID "${href}" no fue encontrada. Asegúrate de que el elemento exista en tu HTML.`);
-      }
-    }
-    setIsMenuOpen(false); // Cierra el menú móvil después de hacer clic en un enlace.
+  /* ---------- 4.  Scroll suave a la sección ---------- */
+  const goTo = (href: string) => {
+    const el = document.querySelector(href);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setMenuOpen(false);
   };
 
   return (
     <>
-      {/* HEADER PRINCIPAL - SIEMPRE OPACA Y ARRIBA DE TODO */}
-      <header
-        className={`sticky top-0 z-50 w-full transition-all duration-300 bg-olive-green shadow-lg`} // Siempre 100% opaco
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4 relative">
-            {/* Logo y nombre del sitio */}
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-terracota rounded-full flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-xl">PN</span>
-              </div>
-              <div>
-                <h1 className="text-white text-2xl font-bold tracking-wide">Patria Nueva</h1>
-                <p className="text-sky-blue text-sm">Santiago de Anaya, Hidalgo</p>
-              </div>
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-olive-green/70 shadow-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3">
+          {/* Logo */}
+          <div className="flex items-center space-x-3 select-none">
+            <div className="h-11 w-11 rounded-full bg-terracota flex items-center justify-center shadow">
+              <span className="text-white font-bold text-lg">PN</span>
             </div>
-
-            {/* Navegación para pantallas grandes */}
-            <nav className="hidden lg:flex items-center space-x-6">
-              {navItems.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className="text-white hover:text-sky-blue transition-colors duration-300 font-medium px-3 py-2 rounded-md"
-                >
-                  {item.name}
-                </button>
-              ))}
-            </nav>
-
-            {/* Botón de menú para dispositivos móviles */}
-            <button
-              className="lg:hidden text-white p-2 focus:outline-none focus:ring-2 focus:ring-white rounded-md"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              ref={menuButtonRef}
-              aria-expanded={isMenuOpen}
-              aria-controls="mobile-menu"
-            >
-              {isMenuOpen ? <X size={28} aria-label="Cerrar menú" /> : <Menu size={28} aria-label="Abrir menú" />}
-            </button>
+            <div>
+              <h1 className="text-white text-xl font-semibold leading-none">Patria Nueva</h1>
+              <p className="text-sky-blue text-xs">Santiago de Anaya, Hidalgo</p>
+            </div>
           </div>
+
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex space-x-6">
+            {navItems.map(item => (
+              <button
+                key={item.name}
+                onClick={() => goTo(item.href)}
+                className={`relative px-2 py-1 font-medium transition
+                  ${active === item.href ? 'text-sky-blue' : 'text-white hover:text-sky-blue'}
+                `}
+              >
+                {item.name}
+                {/* subrayado animado */}
+                <span
+                  className={`absolute left-0 -bottom-0.5 h-0.5 w-full bg-sky-blue transition-transform
+                    ${active === item.href ? 'scale-x-100' : 'scale-x-0'}
+                  `}
+                />
+              </button>
+            ))}
+          </nav>
+
+          {/* Mobile button */}
+          <button
+            ref={buttonRef}
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="lg:hidden p-2 text-white focus:outline-none focus:ring-2 focus:ring-white rounded-md"
+            aria-label="Menú"
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
       </header>
 
-      {/* MENÚ MÓVIL (PANEL LATERAL CON TRANSPARENCIA Y BLUR) */}
-      <div
-        id="mobile-menu"
-        ref={menuRef}
-        className={`lg:hidden fixed top-0 right-0 h-full w-3/4 max-w-sm z-40
-                    bg-olive-green/80 backdrop-blur-sm shadow-2xl // Verde con 80% opacidad y blur ligero
-                    transform transition-transform duration-500 ease-out
-                    ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-      >
-        {/* Capa de fondo oscurecida (overlay) - Menos opaca, para que se vea más el fondo */}
-        {isMenuOpen && (
-          <div
-            className="fixed inset-0 z-30 bg-black bg-opacity-40" // Z-index menor que el menú, opacidad al 40%
-            onClick={() => setIsMenuOpen(false)}
-          ></div>
-        )}
+      {/* Overlay */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden"
+          aria-hidden
+        />
+      )}
 
-        {/* Contenido del menú - dentro del panel deslizante */}
-        <div className="relative h-full flex flex-col items-center py-8 px-6">
-          {/* Botón de cerrar el menú */}
+      {/* Mobile panel */}
+      <aside
+        ref={menuRef}
+        className={`fixed top-0 right-0 z-50 h-full w-72 max-w-[80%] bg-olive-green/90
+          backdrop-blur-md shadow-xl transform transition-transform duration-500 ease-out
+          ${menuOpen ? 'translate-x-0' : 'translate-x-full'}
+        `}
+        role="dialog"
+        aria-label="Navegación principal"
+      >
+        <div className="flex h-full flex-col items-center pt-10 pb-6 px-6">
+          {/* botón cerrar */}
           <button
-            className="absolute top-6 right-6 text-white p-3 rounded-full hover:bg-white/20 transition-colors
-                        focus:outline-none focus:ring-2 focus:ring-terracota"
-            onClick={() => setIsMenuOpen(false)}
+            onClick={() => setMenuOpen(false)}
+            className="absolute top-5 right-5 text-white p-3 rounded-full hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-terracota"
             aria-label="Cerrar menú"
           >
-            <X size={32} />
+            <X size={30} />
           </button>
 
-          {/* Logo dentro del menú (opcional) */}
-          <div className="w-16 h-16 bg-terracota rounded-full flex items-center justify-center shadow-lg mb-8">
-            <span className="text-white font-extrabold text-2xl">PN</span>
+          {/* Logo */}
+          <div className="mb-10 flex items-center space-x-3">
+            <div className="h-14 w-14 rounded-full bg-terracota flex items-center justify-center shadow-lg">
+              <span className="text-white font-extrabold text-2xl">PN</span>
+            </div>
+            <span className="text-white text-2xl font-semibold">Patria Nueva</span>
           </div>
 
-          {/* Elementos de navegación */}
-          <nav className="flex flex-col items-center space-y-6 flex-grow">
-            {navItems.map((item) => (
+          {/* links */}
+          <nav className="flex flex-col items-center space-y-6 w-full">
+            {navItems.map(item => (
               <button
                 key={item.name}
-                onClick={() => scrollToSection(item.href)}
-                className="text-white text-xl font-semibold hover:text-terracota transition-colors duration-300
-                           py-3 px-4 w-full text-center rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota
-                           transform hover:scale-105 active:scale-95 transition-transform"
+                onClick={() => goTo(item.href)}
+                className={`w-full text-center py-3 text-lg font-medium rounded-lg transition
+                  ${active === item.href ? 'bg-white/15 text-sky-blue' : 'text-white hover:bg-white/10'}
+                `}
               >
                 {item.name}
               </button>
             ))}
           </nav>
 
-          {/* Texto adicional al final del menú */}
-          <p className="text-cream text-sm mt-auto pt-6 border-t border-white/20 w-full text-center">
-            Patria Nueva © 2025
-          </p>
+          <p className="mt-auto pt-8 text-cream text-sm">Patria Nueva © 2025</p>
         </div>
-      </div>
+      </aside>
     </>
   );
 };

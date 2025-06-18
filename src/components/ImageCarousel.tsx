@@ -37,7 +37,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className }) => {
           key={i}
           src={src}
           alt={`Imagen carrusel ${i + 1}`}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-700 ${
             i === index ? 'opacity-100' : 'opacity-0'
           }`}
         />

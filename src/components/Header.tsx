@@ -66,12 +66,12 @@ const Header = () => {
           </div>
 
           {/* Navegación para pantallas grandes */}
-          <nav className="hidden lg:flex space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6">
             {navItems.map((item) => (
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
-                className="text-white hover:text-sky-blue transition-colors duration-300 font-medium"
+                className="text-white hover:text-sky-blue transition-colors duration-300 font-medium px-3 py-2"
               >
                 {item.name}
               </button>
@@ -93,7 +93,7 @@ const Header = () => {
         {isMenuOpen && (
           <div
             id="mobile-menu" // ID para accesibilidad
-            className="lg:hidden fixed inset-0 bg-gradient-to-b from-olive-green to-sky-blue bg-opacity-95 backdrop-blur-md flex flex-col items-center justify-center space-y-4"
+            className="lg:hidden fixed inset-0 min-h-screen bg-gradient-to-b from-olive-green to-sky-blue bg-opacity-95 backdrop-blur-md flex flex-col items-center justify-center space-y-6 p-4"
           >
             <button
               className="absolute top-4 right-4 text-white p-2"

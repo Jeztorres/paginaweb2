@@ -71,19 +71,7 @@ const Contacto = () => {
             Estamos aquí para escucharte. Ponte en contacto con nosotros para cualquier consulta, sugerencia o apoyo que necesites.
           </p>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Información de contacto */}
-          <div className="space-y-8">
-            <div className="bg-white bg-opacity-95 rounded-2xl p-8 shadow-lg">
-              <h3 className="text-2xl font-bold text-olive-green mb-6">Información de Contacto</h3>
-              
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-terracota p-3 rounded-full">
-                    <MapPin className="text-white" size={24} />
-                  </div>
-                  <div>
+@@ -75,89 +87,88 @@ const Contacto = () => {
                     <h4 className="font-semibold text-olive-green">Dirección</h4>
                     <p className="text-gray-600">
                       Patria Nueva, Santiago de Anaya<br />
@@ -172,78 +160,7 @@ const Contacto = () => {
           </div>
 
           {/* Formulario de contacto */}
-          <div className="bg-white bg-opacity-95 rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold text-olive-green mb-6">Envíanos un Mensaje</h3>
-            
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="nombre" className="block text-sm font-semibold text-olive-green mb-2">
-                    Nombre Completo *
-                  </label>
-                  <input
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full p-3 border-2 border-sky-blue rounded-lg focus:outline-none focus:border-terracota transition-colors"
-                    placeholder="Tu nombre completo"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="telefono" className="block text-sm font-semibold text-olive-green mb-2">
-                    Teléfono
-                  </label>
-                  <input
-                    type="tel"
-                    id="telefono"
-                    name="telefono"
-                    value={formData.telefono}
-                    onChange={handleInputChange}
-                    className="w-full p-3 border-2 border-sky-blue rounded-lg focus:outline-none focus:border-terracota transition-colors"
-                    placeholder="Tu número de teléfono"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-olive-green mb-2">
-                  Correo Electrónico *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full p-3 border-2 border-sky-blue rounded-lg focus:outline-none focus:border-terracota transition-colors"
-                  placeholder="tu@email.com"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="asunto" className="block text-sm font-semibold text-olive-green mb-2">
-                  Asunto *
-                </label>
-                <select
-                  id="asunto"
-                  name="asunto"
-                  value={formData.asunto}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full p-3 border-2 border-sky-blue rounded-lg focus:outline-none focus:border-terracota transition-colors"
-                >
-                  <option value="">Selecciona un asunto</option>
-                  <option value="informacion-general">Información General</option>
-                  <option value="servicios">Servicios</option>
-                  <option value="eventos">Eventos</option>
-                  <option value="sugerencias">Sugerencias</option>
-                  <option value="quejas">Quejas</option>
-                  <option value="otro">Otro</option>
+@@ -236,54 +247,65 @@ const Contacto = () => {
                 </select>
               </div>
 

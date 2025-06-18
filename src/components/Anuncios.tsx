@@ -78,9 +78,14 @@ const Anuncios: React.FC = () => {
     e.preventDefault();
     if (!emailSuscripcion.trim()) return;
 
-    console.log('Email suscrito:', emailSuscripcion);
-
     try {
+      const res = await fetch('http://localhost:3001/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailSuscripcion }),
+      });
+      if (!res.ok) throw new Error('Error');
+
       setSuscripcionExitosa(true);
       setEmailSuscripcion('');
     } catch (error) {

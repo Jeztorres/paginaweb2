@@ -69,6 +69,9 @@ const Header = () => {
       const element = document.querySelector(href);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        // Opcional: Mensaje de consola si la sección no se encuentra
+        console.warn(`La sección con el ID "${href}" no fue encontrada.`);
       }
     }
     setIsMenuOpen(false); // Cierra el menú móvil después de hacer clic en un enlace.
@@ -78,9 +81,8 @@ const Header = () => {
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? 'bg-olive-green shadow-lg' // Fondo sólido con olive-green al hacer scroll
-          : 'bg-olive-green/90'       // Ligera transparencia inicial para el header, si lo deseas
-                                      // Si quieres que sea siempre sólido, cambia a 'bg-olive-green'
+          ? 'bg-olive-green/95 shadow-lg' // Casi opaco al scroll (95%)
+          : 'bg-olive-green/80'          // Más transparente inicialmente (80%)
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -92,7 +94,7 @@ const Header = () => {
             </div>
             <div>
               <h1 className="text-white text-2xl font-bold tracking-wide">Patria Nueva</h1>
-              <p className="text-sky-blue text-sm">Santiago de Anaya, Hidalgo</p> {/* Usamos sky-blue aquí */}
+              <p className="text-sky-blue text-sm">Santiago de Anaya, Hidalgo</p>
             </div>
           </div>
 
@@ -120,18 +122,19 @@ const Header = () => {
             {isMenuOpen ? <X size={28} aria-label="Cerrar menú" /> : <Menu size={28} aria-label="Abrir menú" />}
           </button>
 
-          {/* Menú móvil (Panel flotante desde la derecha) */}
+          {/* Menú móvil (Panel flotante desde la derecha, ahora transparente) */}
           <div
             id="mobile-menu"
             ref={menuRef}
             className={`lg:hidden fixed top-0 right-0 h-full w-3/4 max-w-sm z-50
-                        bg-olive-green shadow-2xl transform transition-transform duration-500 ease-out
+                        bg-olive-green/70 backdrop-blur-md shadow-2xl // Aquí la transparencia y el blur
+                        transform transition-transform duration-500 ease-out
                         ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
           >
-            {/* Capa de fondo oscurecida (overlay) - Ahora más opaca y sin blur */}
+            {/* Capa de fondo oscurecida (overlay) - Menos opaca, para que se vea más el fondo */}
             {isMenuOpen && (
                 <div
-                    className="fixed inset-0 z-40 bg-black bg-opacity-70" // Opacidad alta, sin blur
+                    className="fixed inset-0 z-40 bg-black bg-opacity-40" // Reducido a 40% de opacidad para ver más el fondo
                     onClick={() => setIsMenuOpen(false)}
                 ></div>
             )}
@@ -141,7 +144,7 @@ const Header = () => {
                 {/* Botón de cerrar el menú */}
                 <button
                     className="absolute top-6 right-6 text-white p-3 rounded-full hover:bg-white/20 transition-colors
-                                focus:outline-none focus:ring-2 focus:ring-terracota" // Anillo de enfoque terracota
+                                focus:outline-none focus:ring-2 focus:ring-terracota"
                     onClick={() => setIsMenuOpen(false)}
                     aria-label="Cerrar menú"
                 >
@@ -159,8 +162,8 @@ const Header = () => {
                     <button
                       key={item.name}
                       onClick={() => scrollToSection(item.href)}
-                      className="text-white text-xl font-semibold hover:text-terracota transition-colors duration-300 // Hover terracota
-                                 py-3 px-4 w-full text-center rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota // Enfoque terracota
+                      className="text-white text-xl font-semibold hover:text-terracota transition-colors duration-300
+                                 py-3 px-4 w-full text-center rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota
                                  transform hover:scale-105 active:scale-95 transition-transform"
                     >
                       {item.name}
@@ -169,7 +172,7 @@ const Header = () => {
                 </nav>
 
                 {/* Texto adicional al final del menú */}
-                <p className="text-cream text-sm mt-auto pt-6 border-t border-white/20 w-full text-center"> {/* Cream para texto footer */}
+                <p className="text-cream text-sm mt-auto pt-6 border-t border-white/20 w-full text-center">
                   Patria Nueva © 2025
                 </p>
             </div>

@@ -5,21 +5,37 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Referencia para el botón que abre el menú (útil para accesibilidad o futuras interacciones)
+  // Referencia para el contenedor del menú para cerrar al hacer clic fuera
+  const menuRef = useRef(null);
+  // Referencia para el botón de menú para evitar cerrarlo al hacer clic en él
   const menuButtonRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Determina si la página se ha desplazado más de 50 píxeles.
       setIsScrolled(window.scrollY > 50);
     };
 
-    // Agrega el event listener al montar el componente.
-    window.addEventListener('scroll', handleScroll);
+    const handleClickOutside = (event) => {
+      // Si el menú está abierto y el clic no fue dentro del menú ni en el botón que lo abre
+      if (
+        isMenuOpen &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        menuButtonRef.current &&
+        !menuButtonRef.current.contains(event.target)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
 
-    // Limpia el event listener al desmontar el componente para evitar fugas de memoria.
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []); // El array vacío asegura que el efecto se ejecute solo una vez al montar y una al desmontar.
+    window.addEventListener('scroll', handleScroll);
+    document.addEventListener('mousedown', handleClickOutside); // Escucha clics en todo el documento
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]); // El efecto se vuelve a ejecutar si isMenuOpen cambia
 
   useEffect(() => {
     // Cuando el menú se abre, evita que el scroll del cuerpo de la página funcione
@@ -28,11 +44,10 @@ const Header = () => {
     } else {
       document.body.style.overflow = 'unset';
     }
-    // Limpieza al desmontar o al cerrar el menú
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isMenuOpen]); // Se ejecuta cada vez que isMenuOpen cambia
+  }, [isMenuOpen]);
 
   // Definición de los ítems de navegación.
   const navItems = [
@@ -59,24 +74,31 @@ const Header = () => {
     setIsMenuOpen(false); // Cierra el menú móvil después de hacer clic en un enlace.
   };
 
+  // --- Colores personalizados basados en la imagen (ajusta estos si es necesario) ---
+  const customGreenStart = '#3C8159'; // Un verde oscuro más cercano al de tu imagen para el degradado
+  const customGreenEnd = '#4A8D63';   // Otro tono de verde para el final del degradado
+  const customDarkGreenHeader = '#346D4B'; // Para el header cuando no hay scroll
+  const customOrange = '#E65100'; // Un naranja terracota más cercano a los ejemplos HTML (si el anterior no fue)
+
   return (
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? 'bg-gradient-to-r from-emerald-800/90 to-lime-700/90 backdrop-blur-md shadow-lg' // Verde más oscuro y vibrante al scroll
-          : 'bg-gradient-to-r from-emerald-700/70 to-lime-600/70 backdrop-blur-md' // Verde oliva suave
+          ? `bg-gradient-to-r from-[${customGreenStart}]/90 to-[${customGreenEnd}]/90 backdrop-blur-md shadow-lg`
+          : `bg-gradient-to-r from-[${customGreenStart}]/70 to-[${customGreenEnd}]/70 backdrop-blur-md`
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center py-4 relative">
           {/* Logo y nombre del sitio */}
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center shadow-md"> {/* Naranja terracota */}
+            <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-md"
+                 style={{ backgroundColor: customOrange }}> {/* Naranja terracota */}
               <span className="text-white font-bold text-xl">PN</span>
             </div>
             <div>
               <h1 className="text-white text-2xl font-bold tracking-wide">Patria Nueva</h1>
-              <p className="text-white/80 text-sm">Santiago de Anaya, Hidalgo</p> {/* Texto más sutil */}
+              <p className="text-white/80 text-sm">Santiago de Anaya, Hidalgo</p>
             </div>
           </div>
 
@@ -103,50 +125,63 @@ const Header = () => {
           >
             {isMenuOpen ? <X size={28} aria-label="Cerrar menú" /> : <Menu size={28} aria-label="Abrir menú" />}
           </button>
-        </div>
 
-        {/* Menú móvil (Overlay a pantalla completa con diseño centrado) */}
-        <div
-          id="mobile-menu"
-          className={`lg:hidden fixed inset-0 z-50 flex items-center justify-center
-                      bg-gradient-to-br from-emerald-800 to-lime-700
-                      transition-opacity duration-500 ease-in-out ${
-                        isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-                      }`}
-        >
-          {/* Botón de cerrar el menú */}
-          <button
-            className="absolute top-6 right-6 text-white p-3 rounded-full hover:bg-white/20 transition-colors
-                       focus:outline-none focus:ring-2 focus:ring-orange-400"
-            onClick={() => setIsMenuOpen(false)}
-            aria-label="Cerrar menú"
+          {/* Menú móvil (Panel flotante desde la derecha) */}
+          <div
+            id="mobile-menu"
+            ref={menuRef}
+            className={`lg:hidden fixed top-0 right-0 h-full w-3/4 max-w-sm z-50
+                        bg-gradient-to-br from-[${customGreenStart}] to-[${customGreenEnd}]
+                        shadow-2xl transform transition-transform duration-500 ease-out
+                        ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
           >
-            <X size={36} /> {/* Icono más grande y prominente */}
-          </button>
+            {/* Capa de fondo oscurecida (overlay) - SOLO CUANDO EL MENÚ ESTÁ ABIERTO */}
+            {isMenuOpen && (
+                <div
+                    className="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm"
+                    onClick={() => setIsMenuOpen(false)}
+                ></div>
+            )}
 
-          {/* Contenido del menú - Centrado y con buen espaciado */}
-          <nav className="flex flex-col items-center justify-center space-y-8 p-4 w-full max-w-sm mx-auto">
-            {/* Opcional: Logo dentro del menú para coherencia */}
-            <div className="w-20 h-20 bg-orange-600 rounded-full flex items-center justify-center shadow-lg mb-4">
-              <span className="text-white font-extrabold text-3xl">PN</span>
+            {/* Contenido del menú - dentro del panel deslizante */}
+            <div className="relative h-full flex flex-col items-center py-8 px-6">
+                {/* Botón de cerrar el menú */}
+                <button
+                    className="absolute top-6 right-6 text-white p-3 rounded-full hover:bg-white/20 transition-colors
+                                focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    onClick={() => setIsMenuOpen(false)}
+                    aria-label="Cerrar menú"
+                >
+                    <X size={32} /> {/* Un poco más pequeño que antes, más discreto */}
+                </button>
+
+                {/* Logo dentro del menú (opcional) */}
+                <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg mb-8"
+                     style={{ backgroundColor: customOrange }}>
+                  <span className="text-white font-extrabold text-2xl">PN</span>
+                </div>
+
+                {/* Elementos de navegación */}
+                <nav className="flex flex-col items-center space-y-6 flex-grow">
+                  {navItems.map((item) => (
+                    <button
+                      key={item.name}
+                      onClick={() => scrollToSection(item.href)}
+                      className="text-white text-xl font-semibold hover:text-orange-300 transition-colors duration-300
+                                 py-3 px-4 w-full text-center rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300
+                                 transform hover:scale-105 active:scale-95 transition-transform"
+                    >
+                      {item.name}
+                    </button>
+                  ))}
+                </nav>
+
+                {/* Texto adicional al final del menú */}
+                <p className="text-white/60 text-sm mt-auto pt-6 border-t border-white/20 w-full text-center">
+                  Patria Nueva © 2025
+                </p>
             </div>
-
-            {navItems.map((item) => (
-              <button
-                key={item.name}
-                onClick={() => scrollToSection(item.href)}
-                className="text-white text-3xl font-semibold hover:text-orange-400 transition-colors duration-300
-                           py-4 px-6 w-full text-center rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400
-                           transform hover:scale-105 active:scale-95 transition-transform"
-              >
-                {item.name}
-              </button>
-            ))}
-
-            {/* Opcional: Separador o texto adicional */}
-            <div className="w-1/2 h-px bg-white/30 my-6"></div>
-            <p className="text-white/70 text-sm">Diseñado con 🧡 para la comunidad de Patria Nueva</p>
-          </nav>
+          </div>
         </div>
       </div>
     </header>

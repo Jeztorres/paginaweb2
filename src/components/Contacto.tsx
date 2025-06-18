@@ -25,6 +25,7 @@ const Contacto = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Prioritize VITE_API_URL if available, otherwise default to an empty string
       const base = import.meta.env.VITE_API_URL || '';
       const res = await fetch(`${base}/api/contact`, {
         method: 'POST',
@@ -45,16 +46,18 @@ const Contacto = () => {
     const lat = 20.3833;
     const lng = -99.2167;
     const query = "Patria Nueva, Santiago de Anaya, Hidalgo, México";
-    
+
     // Detectar si es móvil para abrir la app nativa
     const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
+
     if (isMobile) {
       // Intentar abrir Google Maps app primero, luego Apple Maps
-      window.open(`https://maps.google.com/maps?q=${encodeURIComponent(query)}&ll=${lat},${lng}`, '_blank');
+      // Correctly encode the query
+      window.open(`https://maps.google.com/?q=${encodeURIComponent(query)}&ll=${lat},${lng}`, '_blank');
     } else {
       // En desktop, abrir Google Maps web
-      window.open(`https://www.google.com/maps/search/${encodeURIComponent(query)}/@${lat},${lng},15z`, '_blank');
+      // Correctly encode the query
+      window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}&center=${lat},${lng}&zoom=15`, '_blank');
     }
   };
 
@@ -76,7 +79,7 @@ const Contacto = () => {
           <div className="space-y-8">
             <div className="bg-white bg-opacity-95 rounded-2xl p-8 shadow-lg">
               <h3 className="text-2xl font-bold text-olive-green mb-6">Información de Contacto</h3>
-              
+
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <div className="bg-terracota p-3 rounded-full">
@@ -142,11 +145,11 @@ const Contacto = () => {
             {/* Mapa interactivo */}
             <div className="bg-white bg-opacity-95 rounded-2xl p-8 shadow-lg">
               <h3 className="text-2xl font-bold text-olive-green mb-6">Nuestra Ubicación</h3>
-              
+
               {/* Mapa embebido de Google Maps */}
               <div className="relative rounded-lg overflow-hidden mb-4">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14924.123456789!2d-99.2167!3d20.3833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d35a1234567890%3A0x1234567890abcdef!2sPatria%20Nueva%2C%20Santiago%20de%20Anaya%2C%20Hgo.%2C%20Mexico!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+                  src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15000.0!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(query)}!5e0!3m2!1ses!2smx!4v1678888888888!5m2!1ses!2smx`}
                   width="100%"
                   height="300"
                   style={{ border: 0 }}
@@ -156,7 +159,7 @@ const Contacto = () => {
                   className="rounded-lg"
                 ></iframe>
               </div>
-              
+
               <button
                 onClick={abrirMapa}
                 className="w-full bg-olive-green hover:bg-opacity-90 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300"
@@ -164,7 +167,7 @@ const Contacto = () => {
                 <ExternalLink size={20} />
                 <span>Abrir en Aplicación de Mapas</span>
               </button>
-              
+
               <p className="text-gray-600 text-sm mt-4 text-center">
                 Ubicados en el hermoso Valle del Mezquital, en el corazón de Hidalgo
               </p>
@@ -174,7 +177,7 @@ const Contacto = () => {
           {/* Formulario de contacto */}
           <div className="bg-white bg-opacity-95 rounded-2xl p-8 shadow-lg">
             <h3 className="text-2xl font-bold text-olive-green mb-6">Envíanos un Mensaje</h3>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -269,23 +272,23 @@ const Contacto = () => {
               >
                 <Send size={20} />
                 <span>Enviar Mensaje</span>
-            </button>
-          </form>
+              </button>
+            </form>
 
-          {status === 'success' && (
-            <p className="text-green-600 text-center mt-4">
-              Mensaje enviado exitosamente.
-            </p>
-          )}
-          {status === 'error' && (
-            <p className="text-red-600 text-center mt-4">
-              Hubo un error al enviar el mensaje.
-            </p>
-          )}
+            {status === 'success' && (
+              <p className="text-green-600 text-center mt-4">
+                Mensaje enviado exitosamente.
+              </p>
+            )}
+            {status === 'error' && (
+              <p className="text-red-600 text-center mt-4">
+                Hubo un error al enviar el mensaje.
+              </p>
+            )}
 
-          <p className="text-gray-600 text-sm mt-4 text-center">
-            * Campos obligatorios. Responderemos a tu mensaje dentro de 24 horas.
-          </p>
+            <p className="text-gray-600 text-sm mt-4 text-center">
+              * Campos obligatorios. Responderemos a tu mensaje dentro de 24 horas.
+            </p>
           </div>
         </div>
 
@@ -293,7 +296,7 @@ const Contacto = () => {
         <div className="mt-16 bg-gradient-to-r from-olive-green to-sky-blue bg-opacity-90 rounded-2xl p-8 text-white text-center">
           <h3 className="text-3xl font-bold mb-4">¿Necesitas Ayuda Inmediata?</h3>
           <p className="text-lg mb-6 max-w-3xl mx-auto">
-            Para emergencias o asuntos urgentes, puedes contactar directamente a nuestras autoridades locales 
+            Para emergencias o asuntos urgentes, puedes contactar directamente a nuestras autoridades locales
             o visitar nuestras oficinas en el horario de atención al público.
           </p>
           <button

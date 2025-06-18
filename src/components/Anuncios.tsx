@@ -79,6 +79,7 @@ const Anuncios: React.FC = () => {
     if (!emailSuscripcion.trim()) return;
 
     try {
+      // Prioritize VITE_API_URL if available, otherwise default to an empty string
       const base = import.meta.env.VITE_API_URL || '';
       const res = await fetch(`${base}/api/subscribe`, {
         method: 'POST',
@@ -91,6 +92,9 @@ const Anuncios: React.FC = () => {
       setEmailSuscripcion('');
     } catch (error) {
       console.error('Error al suscribirse:', error);
+      // Optionally, set an error status for the UI
+      // setSuscripcionExitosa(false);
+      // setMostrarSuscripcion(true); // Keep form open to show error
     }
 
     setTimeout(() => {
@@ -102,10 +106,9 @@ const Anuncios: React.FC = () => {
   // Colores por categoría
   const getCategoriaColor = (categoria: string) => {
     const colores: Record<string, string> = {
-      // MODIFICACIÓN: Cambiado a 'bg-terracota/80' para el color naranja con opacidad
       'Feria Patronal': 'bg-terracota/80', // Terracota con 80% de opacidad
-      Gobierno: 'bg-olive-green',
-      Educación: 'bg-sky-blue',
+      'Gobierno': 'bg-olive-green',
+      'Educación': 'bg-sky-blue',
     };
     // Mantenemos un color gris con opacidad para categorías no definidas si es necesario
     return colores[categoria] ?? 'bg-gray-500/60';

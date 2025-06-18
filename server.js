@@ -1,10 +1,15 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 const {
   EMAIL_HOST,
@@ -57,6 +62,11 @@ app.post('/api/contact', async (req, res) => {
     console.error('Error sending contact email:', err);
     res.status(500).json({ success: false, message: 'Error al enviar el mensaje de contacto.' });
   }
+});
+
+// Servir la aplicación frontend en producción
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
 app.post('/api/subscribe', async (req, res) => {

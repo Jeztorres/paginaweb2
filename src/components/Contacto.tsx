@@ -1,311 +1,271 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, Facebook, MessageSquare, ExternalLink } from 'lucide-react';
+import {
+  Bell,
+  Calendar,
+  Info,
+  X,
+  Mail,
+  CheckCircle,
+} from 'lucide-react';
+import ImageCarousel from './ImageCarousel';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 
-const Contacto = () => {
-  const ref = useScrollAnimation<HTMLDivElement>();
-  const [formData, setFormData] = useState({
-    nombre: '',
-    email: '',
-    telefono: '',
-    asunto: '',
-    mensaje: ''
-  });
+interface Anuncio {
+  id: number;
+  titulo: string;
+  resumen: string;
+  fecha: string;
+  categoria: string;
+  imagen: string;
+  imagenes?: string[];
+  contenidoCompleto: string;
+  detalles?: string[];
+}
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+const Anuncios: React.FC = () => {
+  const ref = useScrollAnimation<HTMLDivElement>();
+
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [anuncioSeleccionado, setAnuncioSeleccionado] = useState<Anuncio | null>(null);
+  const [emailSuscripcion, setEmailSuscripcion] = useState('');
+  const [suscripcionExitosa, setSuscripcionExitosa] = useState(false);
+  const [mostrarSuscripcion, setMostrarSuscripcion] = useState(false);
+
+  // Carga de imágenes
+  const anuncio1Images = Object.values(
+    import.meta.glob('../assets/anuncios-carousel/anuncio1/*.{jpg,jpeg,png,webp}', {
+      eager: true,
+      as: 'url',
+    })
+  ) as string[];
+
+  const anuncio1Portada = Object.values(
+    import.meta.glob('../assets/anuncios-portada/feria-preciosa-sangre/*.{jpg,jpeg,png,webp}', {
+      eager: true,
+      as: 'url',
+    })
+  ) as string[];
+
+  // Datos de ejemplo
+  const anuncios: Anuncio[] = [
+    {
+      id: 1,
+      titulo: 'Gran Feria a "La Preciosa Sangre de Cristo" Patria Nueva 2025',
+      resumen: 'Únete a nosotros para celebrar la Gran Feria a "La Preciosa Sangre de Cristo" en Patria Nueva 2025. Disfruta de actividades culturales, gastronomía local y eventos para toda la familia.',
+      fecha: '1 de Julio, 2025',
+      categoria: 'Feria Patronal',
+      imagen: anuncio1Portada[0] || anuncio1Images[0] || '',
+      imagenes: anuncio1Images,
+      contenidoCompleto: '',
+      detalles: [],
+    },
+    // You can add more announcements here
+  ];
+
+  // Funciones de UI
+  const abrirModal = (anuncio: Anuncio) => {
+    setAnuncioSeleccionado(anuncio);
+    setModalAbierto(true);
   };
 
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const cerrarModal = () => {
+    setModalAbierto(false);
+    setAnuncioSeleccionado(null);
+  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Suscripción
+  const manejarSuscripcion = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!emailSuscripcion.trim()) return;
+
     try {
+      // Prioritize VITE_API_URL if available, otherwise default to an empty string
       const base = import.meta.env.VITE_API_URL || '';
-      const res = await fetch(`${base}/api/contact`, {
+      const res = await fetch(`${base}/api/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ email: emailSuscripcion }),
       });
       if (!res.ok) throw new Error('Error');
-      setStatus('success');
-      setFormData({ nombre: '', email: '', telefono: '', asunto: '', mensaje: '' });
-    } catch (err) {
-      console.error('Error al enviar mensaje:', err);
-      setStatus('error');
+
+      setSuscripcionExitosa(true);
+      setEmailSuscripcion('');
+    } catch (error) {
+      console.error('Error al suscribirse:', error);
+      // Optionally, set an error status for the UI
+      // setSuscripcionExitosa(false);
+      // setMostrarSuscripcion(true); // Keep form open to show error
     }
+
+    setTimeout(() => {
+      setSuscripcionExitosa(false);
+      setMostrarSuscripcion(false);
+    }, 3000);
   };
 
-  const abrirMapa = () => {
-    // Coordenadas aproximadas de Patria Nueva, Santiago de Anaya, Hidalgo
-    const lat = 20.3833;
-    const lng = -99.2167;
-    const query = "Patria Nueva, Santiago de Anaya, Hidalgo, México";
-    
-    // Detectar si es móvil para abrir la app nativa
-    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    if (isMobile) {
-      // Intentar abrir Google Maps app primero, luego Apple Maps
-      window.open(`https://maps.google.com/maps?q=${encodeURIComponent(query)}&ll=${lat},${lng}`, '_blank');
-    } else {
-      // En desktop, abrir Google Maps web
-      window.open(`https://www.google.com/maps/search/${encodeURIComponent(query)}/@${lat},${lng},15z`, '_blank');
-    }
+  // Colores por categoría
+  const getCategoriaColor = (categoria: string) => {
+    const colores: Record<string, string> = {
+      'Feria Patronal': 'bg-terracota/80', // Terracota con 80% de opacidad
+      'Gobierno': 'bg-olive-green',
+      'Educación': 'bg-sky-blue',
+    };
+    // Mantenemos un color gris con opacidad para categorías no definidas si es necesario
+    return colores[categoria] ?? 'bg-gray-500/60';
   };
 
   return (
-    <div ref={ref} className="scroll-animation py-20 bg-cream bg-opacity-80">
+    <div ref={ref} className="scroll-animation py-20 bg-gradient-to-br from-cream to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Encabezado */}
         <div className="text-center mb-16">
           <div className="flex justify-center mb-6">
-            <MessageSquare className="text-olive-green" size={48} />
+            <Bell className="text-terracota" size={48} />
           </div>
-          <h2 className="text-5xl font-bold text-olive-green mb-6">Contáctanos</h2>
-          <p className="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
-            Estamos aquí para escucharte. Ponte en contacto con nosotros para cualquier consulta, sugerencia o apoyo que necesites.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Información de contacto */}
-          <div className="space-y-8">
-            <div className="bg-white bg-opacity-95 rounded-2xl p-8 shadow-lg">
-              <h3 className="text-2xl font-bold text-olive-green mb-6">Información de Contacto</h3>
-              
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-terracota p-3 rounded-full">
-                    <MapPin className="text-white" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-olive-green">Dirección</h4>
-                    <p className="text-gray-600">
-                      Patria Nueva, Santiago de Anaya<br />
-                      Hidalgo, México, C.P. 42350
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="bg-sky-blue p-3 rounded-full">
-                    <Phone className="text-white" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-olive-green">Teléfono</h4>
-                    <p className="text-gray-600">+52 771 234 5677</p>
-                    <p className="text-gray-600 text-sm">Lunes a Viernes: 9:00 AM - 5:00 PM</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="bg-terracota p-3 rounded-full">
-                    <Mail className="text-white" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-olive-green">Correo Electrónico</h4>
-                    <p className="text-gray-600">contacto@patrianueva.gob.mx</p>
-                    <p className="text-gray-600">info@patrianueva.com</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="bg-sky-blue p-3 rounded-full">
-                    <Clock className="text-white" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-olive-green">Horarios de Atención</h4>
-                    <p className="text-gray-600">Lunes - Viernes: 9:00 AM - 5:00 PM</p>
-                    <p className="text-gray-600">Sábados: 9:00 AM - 1:00 PM</p>
-                    <p className="text-gray-600">Domingos: Cerrado</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-gray-200">
-                <h4 className="font-semibold text-olive-green mb-4">Síguenos en Redes Sociales</h4>
-                <div className="flex space-x-4">
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full transition-colors">
-                    <Facebook size={20} />
-                  </button>
-                  <button className="bg-terracota hover:bg-opacity-90 text-white p-3 rounded-full transition-colors">
-                    <MessageSquare size={20} />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Mapa interactivo */}
-            <div className="bg-white bg-opacity-95 rounded-2xl p-8 shadow-lg">
-              <h3 className="text-2xl font-bold text-olive-green mb-6">Nuestra Ubicación</h3>
-              
-              {/* Mapa embebido de Google Maps */}
-              <div className="relative rounded-lg overflow-hidden mb-4">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14924.123456789!2d-99.2167!3d20.3833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d35a1234567890%3A0x1234567890abcdef!2sPatria%20Nueva%2C%20Santiago%20de%20Anaya%2C%20Hgo.%2C%20Mexico!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
-                  width="100%"
-                  height="300"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="rounded-lg"
-                ></iframe>
-              </div>
-              
-              <button
-                onClick={abrirMapa}
-                className="w-full bg-olive-green hover:bg-opacity-90 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300"
-              >
-                <ExternalLink size={20} />
-                <span>Abrir en Aplicación de Mapas</span>
-              </button>
-              
-              <p className="text-gray-600 text-sm mt-4 text-center">
-                Ubicados en el hermoso Valle del Mezquital, en el corazón de Hidalgo
-              </p>
-            </div>
-          </div>
-
-          {/* Formulario de contacto */}
-          <div className="bg-white bg-opacity-95 rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold text-olive-green mb-6">Envíanos un Mensaje</h3>
-            
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="nombre" className="block text-sm font-semibold text-olive-green mb-2">
-                    Nombre Completo *
-                  </label>
-                  <input
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full p-3 border-2 border-sky-blue rounded-lg focus:outline-none focus:border-terracota transition-colors"
-                    placeholder="Tu nombre completo"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="telefono" className="block text-sm font-semibold text-olive-green mb-2">
-                    Teléfono
-                  </label>
-                  <input
-                    type="tel"
-                    id="telefono"
-                    name="telefono"
-                    value={formData.telefono}
-                    onChange={handleInputChange}
-                    className="w-full p-3 border-2 border-sky-blue rounded-lg focus:outline-none focus:border-terracota transition-colors"
-                    placeholder="Tu número de teléfono"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-olive-green mb-2">
-                  Correo Electrónico *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full p-3 border-2 border-sky-blue rounded-lg focus:outline-none focus:border-terracota transition-colors"
-                  placeholder="tu@email.com"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="asunto" className="block text-sm font-semibold text-olive-green mb-2">
-                  Asunto *
-                </label>
-                <select
-                  id="asunto"
-                  name="asunto"
-                  value={formData.asunto}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full p-3 border-2 border-sky-blue rounded-lg focus:outline-none focus:border-terracota transition-colors"
-                >
-                  <option value="">Selecciona un asunto</option>
-                  <option value="informacion-general">Información General</option>
-                  <option value="servicios">Servicios</option>
-                  <option value="eventos">Eventos</option>
-                  <option value="sugerencias">Sugerencias</option>
-                  <option value="quejas">Quejas</option>
-                  <option value="otro">Otro</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="mensaje" className="block text-sm font-semibold text-olive-green mb-2">
-                  Mensaje *
-                </label>
-                <textarea
-                  id="mensaje"
-                  name="mensaje"
-                  value={formData.mensaje}
-                  onChange={handleInputChange}
-                  required
-                  rows={5}
-                  className="w-full p-3 border-2 border-sky-blue rounded-lg resize-none focus:outline-none focus:border-terracota transition-colors"
-                  placeholder="Escribe tu mensaje aquí..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-terracota hover:bg-opacity-90 text-white py-4 px-6 rounded-lg font-semibold text-lg flex items-center justify-center space-x-2 transition-colors"
-              >
-                <Send size={20} />
-                <span>Enviar Mensaje</span>
-            </button>
-          </form>
-
-          {status === 'success' && (
-            <p className="text-green-600 text-center mt-4">
-              Mensaje enviado exitosamente.
-            </p>
-          )}
-          {status === 'error' && (
-            <p className="text-red-600 text-center mt-4">
-              Hubo un error al enviar el mensaje.
-            </p>
-          )}
-
-          <p className="text-gray-600 text-sm mt-4 text-center">
-            * Campos obligatorios. Responderemos a tu mensaje dentro de 24 horas.
-          </p>
-          </div>
-        </div>
-
-        {/* Información adicional */}
-        <div className="mt-16 bg-gradient-to-r from-olive-green to-sky-blue bg-opacity-90 rounded-2xl p-8 text-white text-center">
-          <h3 className="text-3xl font-bold mb-4">¿Necesitas Ayuda Inmediata?</h3>
-          <p className="text-lg mb-6 max-w-3xl mx-auto">
-            Para emergencias o asuntos urgentes, puedes contactar directamente a nuestras autoridades locales 
-            o visitar nuestras oficinas en el horario de atención al público.
+          <h2 className="text-5xl font-bold text-olive-green mb-6">Anuncios Importantes</h2>
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
+            Mantente informado sobre las noticias y desarrollos más importantes de nuestra comunidad.
           </p>
           <button
-            onClick={() => window.open('tel:911', '_self')}
-            className="bg-white bg-opacity-20 hover:bg-opacity-30 px-6 py-3 rounded-full font-semibold"
+            onClick={() => setMostrarSuscripcion(!mostrarSuscripcion)}
+            className="bg-sky-blue hover:bg-opacity-90 text-white px-6 py-3 rounded-full font-semibold flex items-center space-x-2 mx-auto transition-colors duration-300"
           >
-            Emergencias: 911
+            <Mail size={20} />
+            <span>Suscríbete a Notificaciones</span>
           </button>
         </div>
+
+        {/* Formulario de suscripción */}
+        {mostrarSuscripcion && (
+          <div className="max-w-md mx-auto mb-12 bg-white/95 rounded-2xl p-6 shadow-lg">
+            <h3 className="text-xl font-bold text-olive-green mb-4 text-center">Recibe Notificaciones Gratuitas</h3>
+            <p className="text-gray-600 text-sm mb-4 text-center">
+              Te enviaremos un email cada vez que publiquemos un nuevo anuncio importante.
+            </p>
+
+            {suscripcionExitosa ? (
+              <div className="text-center">
+                <CheckCircle className="text-green-500 mx-auto mb-2" size={32} />
+                <p className="text-green-600 font-semibold">¡Suscripción exitosa!</p>
+                <p className="text-gray-600 text-sm">Recibirás notificaciones en tu email.</p>
+              </div>
+            ) : (
+              <form onSubmit={manejarSuscripcion} className="space-y-4">
+                <input
+                  type="email"
+                  value={emailSuscripcion}
+                  onChange={(e) => setEmailSuscripcion(e.target.value)}
+                  placeholder="tu@email.com"
+                  required
+                  className="w-full p-3 border-2 border-sky-blue rounded-lg focus:outline-none focus:border-terracota transition-colors"
+                />
+                <button
+                  type="submit"
+                  className="w-full bg-terracota hover:bg-opacity-90 text-white py-3 rounded-lg font-semibold transition-colors"
+                >
+                  Suscribirse Gratis
+                </button>
+              </form>
+            )}
+          </div>
+        )}
+
+        {/* Cards de anuncios */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+          {anuncios.map((anuncio) => (
+            <div
+              key={anuncio.id}
+              className="rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-full max-w-md mx-auto bg-white"
+            >
+              <div className="relative h-64 flex items-center justify-center">
+                <img src={anuncio.imagen} alt={anuncio.titulo} className="w-full h-full object-cover" />
+                {/* Cuadro de categoría en la tarjeta - APLICACIÓN DEL CAMBIO AQUÍ */}
+                <div
+                  className={`absolute top-4 left-4 ${getCategoriaColor(
+                    anuncio.categoria
+                  )} text-white px-3 py-1 rounded-full text-sm font-semibold`}
+                >
+                  {anuncio.categoria}
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex items-center text-sm text-gray-500 mb-3">
+                  <Calendar size={16} className="mr-2" />
+                  {anuncio.fecha}
+                </div>
+                <h3 className="text-xl font-bold text-olive-green mb-3 line-clamp-2">
+                  {anuncio.titulo}
+                </h3>
+                <p className="text-gray-600 mb-4 line-clamp-3">
+                  {anuncio.resumen || 'Haz clic para ver más detalles sobre este anuncio.'}
+                </p>
+                <button
+                  onClick={() => abrirModal(anuncio)}
+                  className="w-full bg-terracota hover:bg-opacity-90 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300"
+                >
+                  <Info size={18} />
+                  <span>Conoce el programa y los eventos</span>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Modal de Anuncio */}
+        {modalAbierto && anuncioSeleccionado && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            {/* Fondo general del modal (verde transparente) */}
+            <div className="rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto bg-olive-green/20 relative shadow-2xl backdrop-blur-sm">
+              {/* Close Button */}
+              <button
+                onClick={cerrarModal}
+                className="absolute top-4 right-4 bg-black/40 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-20"
+                aria-label="Cerrar modal"
+              >
+                <X size={20} />
+              </button>
+
+              {/* Image Carousel - ajustando la altura para que la imagen se estire más */}
+              <ImageCarousel
+                images={anuncioSeleccionado.imagenes ?? [anuncioSeleccionado.imagen]}
+                className="w-full h-[400px]" // Altura fija para el carrusel
+                imgClassName="object-contain"
+              />
+
+              {/* Contenido del anuncio dentro del modal con fondo verde transparente y TEXTO CLARO */}
+              <div className="p-6 text-center bg-olive-green/20">
+                <h3 className="text-2xl font-bold text-white mb-3">
+                  {anuncioSeleccionado.titulo}
+                </h3>
+                {/* Cuadro de categoría en el modal - APLICACIÓN DEL CAMBIO AQUÍ */}
+                <div className={`inline-block ${getCategoriaColor(anuncioSeleccionado.categoria)} text-white px-3 py-1 rounded-full text-sm font-semibold mb-4`}>
+                  {anuncioSeleccionado.categoria}
+                </div>
+                <div className="flex items-center justify-center text-sm text-white mb-4">
+                  <Calendar size={16} className="mr-2" />
+                  {anuncioSeleccionado.fecha}
+                </div>
+
+                {anuncioSeleccionado.contenidoCompleto && (
+                  <p className="mt-4 text-white text-left whitespace-pre-line leading-relaxed">
+                    {anuncioSeleccionado.contenidoCompleto}
+                  </p>
+                )}
+
+                {anuncioSeleccionado.detalles && anuncioSeleccionado.detalles.length > 0 && (
+                  <ul className="mt-4 text-white text-left list-disc list-inside space-y-1">
+                    {anuncioSeleccionado.detalles.map((detalle, index) => (
+                      <li key={index}>{detalle}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default Contacto;
+export default Anuncios;

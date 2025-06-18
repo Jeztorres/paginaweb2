@@ -49,21 +49,12 @@ const Anuncios: React.FC = () => {
     {
       id: 1,
       titulo: 'Gran Feria a "La Preciosa Sangre de Cristo" Patria Nueva 2025',
-      resumen: '¡La fiesta más grande del año! Tradición que late con fuerza en el corazón del Mezquital.',
+      resumen: '',
       fecha: '1 de Julio, 2025',
       categoria: 'Feria Patronal',
       imagen: anuncio1Portada[0] || anuncio1Images[0] || '',
       imagenes: anuncio1Images,
-      contenidoCompleto: '¡La fiesta más grande del año! Tradición que late con fuerza: coronación de la reina, bailes populares y ambiente familiar en el corazón del Mezquital. ¡Nos vemos en la feria!',
-      detalles: [
-        'Ubicación: Centro de Patria Nueva, Santiago de Anaya, Hidalgo',
-        'Coronación de la reina de la feria',
-        'Bailes populares y música en vivo',
-        'Juegos mecánicos para toda la familia',
-        'Charreadas y jaripeo nocturno',
-        'Espectáculos de fuegos artificiales',
-        'Ambiente familiar y comunitario',
-      ],
+      contenidoCompleto: '',
     },
   ];
 
@@ -160,7 +151,7 @@ const Anuncios: React.FC = () => {
                   {anuncio.categoria}
                 </div>
               </div>
-              <div className="p-6 bg-white/95">
+              <div className="p-6 bg-white">
                 <div className="flex items-center text-sm text-gray-500 mb-3">
                   <Calendar size={16} className="mr-2" />
                   {anuncio.fecha}
@@ -179,7 +170,7 @@ const Anuncios: React.FC = () => {
         </div>
 
         {modalAbierto && anuncioSeleccionado && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
             <div className="rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="relative">
                 <ImageCarousel
@@ -188,28 +179,13 @@ const Anuncios: React.FC = () => {
                 />
                 <button
                   onClick={cerrarModal}
-                  className="absolute top-4 right-4 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-colors"
+                  className="absolute top-4 right-4 bg-black text-white p-2 rounded-full hover:bg-opacity-70 transition-colors"
                 >
                   <X size={20} />
                 </button>
                 <div className={`absolute bottom-4 left-4 ${getCategoriaColor(anuncioSeleccionado.categoria)} text-white px-3 py-1 rounded-full text-sm font-semibold`}>
                   {anuncioSeleccionado.categoria}
                 </div>
-              </div>
-              <div className="p-6 bg-white">
-                <h3 className="text-2xl font-bold text-olive-green">
-                  {anuncioSeleccionado.titulo}
-                </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {anuncioSeleccionado.contenidoCompleto}
-                </p>
-                {anuncioSeleccionado.detalles && (
-                  <ul className="list-disc pl-5 space-y-1 text-gray-600">
-                    {anuncioSeleccionado.detalles.map((item, idx) => (
-                      <li key={idx}>{item}</li>
-                    ))}
-                  </ul>
-                )}
               </div>
             </div>
           </div>

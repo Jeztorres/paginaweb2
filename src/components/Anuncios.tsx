@@ -31,6 +31,7 @@ const Anuncios: React.FC = () => {
   const [suscripcionExitosa, setSuscripcionExitosa] = useState(false);
   const [mostrarSuscripcion, setMostrarSuscripcion] = useState(false);
 
+  // Carga de imágenes
   const anuncio1Images = Object.values(
     import.meta.glob('../assets/anuncios-carousel/anuncio1/*.{jpg,jpeg,png,webp}', {
       eager: true,
@@ -45,6 +46,7 @@ const Anuncios: React.FC = () => {
     })
   ) as string[];
 
+  // Datos de ejemplo
   const anuncios: Anuncio[] = [
     {
       id: 1,
@@ -58,6 +60,7 @@ const Anuncios: React.FC = () => {
     },
   ];
 
+  // Funciones de UI
   const abrirModal = (anuncio: Anuncio) => {
     setAnuncioSeleccionado(anuncio);
     setModalAbierto(true);
@@ -68,6 +71,7 @@ const Anuncios: React.FC = () => {
     setAnuncioSeleccionado(null);
   };
 
+  // Suscripción
   const manejarSuscripcion = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!emailSuscripcion.trim()) return;
@@ -82,6 +86,7 @@ const Anuncios: React.FC = () => {
     }, 3000);
   };
 
+  // Colores por categoría
   const getCategoriaColor = (categoria: string) => {
     const colores: Record<string, string> = {
       'Feria Patronal': 'bg-terracota',
@@ -94,6 +99,7 @@ const Anuncios: React.FC = () => {
   return (
     <div ref={ref} className="scroll-animation py-20 bg-gradient-to-br from-cream to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Encabezado */}
         <div className="text-center mb-16">
           <div className="flex justify-center mb-6">
             <Bell className="text-terracota" size={48} />
@@ -111,6 +117,7 @@ const Anuncios: React.FC = () => {
           </button>
         </div>
 
+        {/* Formulario de suscripción */}
         {mostrarSuscripcion && (
           <div className="max-w-md mx-auto mb-12 bg-white/95 rounded-2xl p-6 shadow-lg">
             <h3 className="text-xl font-bold text-olive-green mb-4 text-center">Recibe Notificaciones Gratuitas</h3>
@@ -134,7 +141,10 @@ const Anuncios: React.FC = () => {
                   required
                   className="w-full p-3 border-2 border-sky-blue rounded-lg focus:outline-none focus:border-terracota transition-colors"
                 />
-                <button type="submit" className="w-full bg-terracota hover:bg-opacity-90 text-white py-3 rounded-lg font-semibold transition-colors">
+                <button
+                  type="submit"
+                  className="w-full bg-terracota hover:bg-opacity-90 text-white py-3 rounded-lg font-semibold transition-colors"
+                >
                   Suscribirse Gratis
                 </button>
               </form>
@@ -142,12 +152,20 @@ const Anuncios: React.FC = () => {
           </div>
         )}
 
+        {/* Cards de anuncios */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
           {anuncios.map((anuncio) => (
-            <div key={anuncio.id} className="rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-full max-w-md mx-auto">
+            <div
+              key={anuncio.id}
+              className="rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-full max-w-md mx-auto"
+            >
               <div className="relative h-64 flex items-center justify-center">
                 <img src={anuncio.imagen} alt={anuncio.titulo} className="w-full h-full object-cover" />
-                <div className={`absolute top-4 left-4 ${getCategoriaColor(anuncio.categoria)} text-white px-3 py-1 rounded-full text-sm font-semibold`}>
+                <div
+                  className={`absolute top-4 left-4 ${getCategoriaColor(
+                    anuncio.categoria
+                  )} text-white px-3 py-1 rounded-full text-sm font-semibold`}
+                >
                   {anuncio.categoria}
                 </div>
               </div>
@@ -160,7 +178,10 @@ const Anuncios: React.FC = () => {
                   {anuncio.titulo}
                 </h3>
                 <p className="text-gray-600 mb-4 line-clamp-3">{anuncio.resumen}</p>
-                <button onClick={() => abrirModal(anuncio)} className="w-full bg-terracota hover:bg-opacity-90 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">
+                <button
+                  onClick={() => abrirModal(anuncio)}
+                  className="w-full bg-terracota hover:bg-opacity-90 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300"
+                >
                   <Info size={18} />
                   <span>Conoce el programa y los eventos</span>
                 </button>
@@ -169,8 +190,9 @@ const Anuncios: React.FC = () => {
           ))}
         </div>
 
+        {/* Modal */}
         {modalAbierto && anuncioSeleccionado && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
             <div className="rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="relative">
                 <ImageCarousel
@@ -179,14 +201,19 @@ const Anuncios: React.FC = () => {
                 />
                 <button
                   onClick={cerrarModal}
-                  className="absolute top-4 right-4 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-colors"
+                  className="absolute top-4 right-4 bg-black text-white p-2 rounded-full hover:bg-opacity-70 transition-colors"
                 >
                   <X size={20} />
                 </button>
-                <div className={`absolute bottom-4 left-4 ${getCategoriaColor(anuncioSeleccionado.categoria)} text-white px-3 py-1 rounded-full text-sm font-semibold`}>
+                <div
+                  className={`absolute bottom-4 left-4 ${getCategoriaColor(
+                    anuncioSeleccionado.categoria
+                  )} text-white px-3 py-1 rounded-full text-sm font-semibold`}
+                >
                   {anuncioSeleccionado.categoria}
                 </div>
               </div>
+
               <div className="p-6 bg-white text-center">
                 <h3 className="text-2xl font-bold text-olive-green">
                   {anuncioSeleccionado.titulo}

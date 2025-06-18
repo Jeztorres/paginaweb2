@@ -1,19 +1,19 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
 import cors from 'cors';
-import path from 'path'; // Import path for serving static files
-import { fileURLToPath } from 'url'; // Import for ES Modules __dirname equivalent
+import path from 'path'; // Needed for resolving file paths
+import { fileURLToPath } from 'url'; // Needed for __dirname equivalent in ES Modules
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// For ES Modules, we need to manually define __dirname
+// In ES Modules, __dirname is not natively available, so we define it:
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the 'dist' directory (your frontend build)
-// This is typically for production deployments where the backend serves the compiled frontend.
+// Serve static files from the 'dist' directory.
+// This is typical for production environments where your backend also hosts the compiled frontend.
 app.use(express.static(path.join(__dirname, 'dist')));
 
 const {
@@ -21,41 +21,41 @@ const {
   EMAIL_PORT,
   EMAIL_USER,
   EMAIL_PASS,
-  EMAIL_TO = 'l21200651@pachuca.tecnm.mx',
+  EMAIL_TO = 'l21200651@pachuca.tecnm.mx', // Default recipient email address
 } = process.env;
 
 let transporter;
 
-// If an SMTP server is not defined, Gmail is assumed by default
+// If EMAIL_HOST isn't specified, we'll default to Gmail's SMTP settings.
 if (!EMAIL_HOST && EMAIL_USER && EMAIL_PASS) {
   transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: 'gmail', // Use 'gmail' as a special service value
     auth: { user: EMAIL_USER, pass: EMAIL_PASS },
   });
 } else {
   transporter = nodemailer.createTransport({
-    host: EMAIL_HOST || 'smtp.gmail.com', // Fallback to Gmail SMTP if EMAIL_HOST is not provided
-    port: EMAIL_PORT ? Number(EMAIL_PORT) : 587,
-    secure: false, // Use 'true' if your SMTP server uses SSL/TLS on port 465 (e.g., port 465 for SSL)
-    auth: EMAIL_USER && EMAIL_PASS ? { user: EMAIL_USER, pass: EMAIL_PASS } : undefined,
+    host: EMAIL_HOST || 'smtp.gmail.com', // Fallback to Gmail's SMTP if no host is explicitly provided
+    port: EMAIL_PORT ? Number(EMAIL_PORT) : 587, // Default to port 587 (for STARTTLS) if not specified
+    secure: false, // Set to 'true' if using port 465 (SSL/TLS), 'false' for 587 (STARTTLS)
+    auth: EMAIL_USER && EMAIL_PASS ? { user: EMAIL_USER, pass: EMAIL_PASS } : undefined, // Only use auth if credentials exist
   });
 }
 
 app.post('/api/contact', async (req, res) => {
   const { nombre, email, telefono, asunto, mensaje } = req.body;
   try {
-    // Send email to the designated recipient (EMAIL_TO)
+    // Send the contact email to the configured recipient (EMAIL_TO)
     await transporter.sendMail({
-      from: email, // The sender's email from the form
+      from: email, // The sender's email from the contact form
       to: EMAIL_TO,
       subject: `Contacto: ${asunto}`,
-      text: `Nombre: ${nombre}\nEmail: ${email}\nTelefono: <span class="math-inline">\{telefono\}\\n\\n</span>{mensaje}`,
+      text: `Nombre: ${nombre}\nEmail: ${email}\nTelefono: ${telefono}\n\n${mensaje}`, // Fixed: Removed erroneous HTML/LaTeX tags
     });
 
-    // Send a confirmation email to the sender if an email address was provided
+    // Send a confirmation email back to the sender if their email was provided
     if (email) {
       await transporter.sendMail({
-        from: EMAIL_USER, // Your sending email account from .env
+        from: EMAIL_USER, // Your application's sending email address
         to: email,
         subject: 'Hemos recibido tu mensaje',
         text: 'Gracias por contactarnos. En breve te responderemos.',
@@ -64,7 +64,7 @@ app.post('/api/contact', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error('Error sending contact email:', err);
-    // Provide a more descriptive error message for the client
+    // Provide a more user-friendly error message to the client
     res.status(500).json({ success: false, message: 'Error al enviar el mensaje de contacto.' });
   }
 });
@@ -72,7 +72,7 @@ app.post('/api/contact', async (req, res) => {
 app.post('/api/subscribe', async (req, res) => {
   const { email } = req.body;
   try {
-    // Send subscription notification to the designated recipient (EMAIL_TO)
+    // Send a new subscriber notification to the configured recipient (EMAIL_TO)
     await transporter.sendMail({
       from: EMAIL_USER,
       to: EMAIL_TO,
@@ -80,10 +80,10 @@ app.post('/api/subscribe', async (req, res) => {
       text: `Nuevo correo suscrito: ${email}`,
     });
 
-    // Send a welcome email to the subscriber if an email address was provided
+    // Send a welcome email to the new subscriber if their email was provided
     if (email) {
       await transporter.sendMail({
-        from: EMAIL_USER, // Your sending email account from .env
+        from: EMAIL_USER, // Your application's sending email address
         to: email,
         subject: 'Bienvenido a Patria Nueva',
         text: 'Gracias por suscribirte a nuestro boletín.',
@@ -93,7 +93,18 @@ app.post('/api/subscribe', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error('Error sending subscription email:', err);
-    // Provide a more descriptive error message for the client
+    // Provide a more user-friendly error message to the client
     res.status(500).json({ success: false, message: 'Error al procesar la suscripción.' });
   }
+});
+
+// This wildcard route serves your frontend's index.html for any requests
+// that don't match the API endpoints. This is key for single-page applications (SPAs).
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });

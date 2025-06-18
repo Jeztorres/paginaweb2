@@ -152,10 +152,10 @@ const Anuncios = () => {
           {anuncios.map((anuncio) => (
             <div key={anuncio.id} className="bg-white bg-opacity-95 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-full max-w-md mx-auto">
               <div className="relative h-48">
-                <img 
-                  src={anuncio.imagen} 
+                <img
+                  src={anuncio.imagen}
                   alt={anuncio.titulo}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
                 <div className={`absolute top-4 left-4 ${getCategoriaColor(anuncio.categoria)} text-white px-3 py-1 rounded-full text-sm font-semibold`}>
                   {anuncio.categoria}

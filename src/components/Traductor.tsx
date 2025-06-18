@@ -5,32 +5,114 @@ import useScrollAnimation from '../hooks/useScrollAnimation';
 const Traductor = () => {
   const ref = useScrollAnimation<HTMLDivElement>();
   const [textoEspanol, setTextoEspanol] = useState('');
-  const [textoHnahnu, setTextoHnahnu] = useState('');
+  const [textoOtomi, setTextoOtomi] = useState('');
   const [direccion, setDireccion] = useState<'esp-hna' | 'hna-esp'>('esp-hna');
 
   // Diccionario básico para simulación (en un proyecto real esto vendría de una API)
   const diccionario: { [key: string]: string } = {
-    'hola': 'jäi',
-    'adiós': 'hai ra ya',
-    'gracias': 'nzaki',
-    'por favor': 'ga tho',
-    'sí': 'je',
-    'no': 'hindi',
-    'casa': 'hñu',
+    'amor': "nzaya / nts'aya",
+    'buenos dias': 'ya hne gui ra xudi / ya xudi',
+    'buenas tardes': 'ya hne gui ra ndähi / ya ndähi',
+    'buenas noches': 'ya hne gui ra xui / ya xui',
+    'gracias': 'hñate / jamadi (jamädi)',
     'agua': 'dehe',
-    'comida': 'nthäti',
-    'familia': 'hnini',
-    'amor': 'hmunts\'i',
-    'pueblo': 'bojay',
-    'montaña': 'zänä',
-    'cielo': 'hyadi',
-    'tierra': 'ñäñho',
-    'bueno': 'ngu',
-    'malo': 'mäs ngu',
-    'grande': 'pet\'a',
-    'pequeño': "ts'ut'u",
-    'niño': 'dänxu',
-    'niña': 'ts\'oki'
+    'hombre': 'nuni',
+    'mujer': "b'eñ'o / nxutsi",
+    'hola': "hia / nts'ofo",
+    'sol': "hmunts'i",
+    'luna': 'zana',
+    'estrella': "ts'i",
+    'tierra': "ximha / xi'i",
+    'cielo': 'mahets\'i',
+    'fuego': 'zi',
+    'aire': 'ndähi',
+    'día': 'xudi',
+    'noche': 'xui',
+    'mañana': 'xudi',
+    'tarde': 'ndähi',
+    'niña': 'bebe',
+    'niño': 'nänä',
+    'casa': 'ngu',
+    'pueblo': 'hñä',
+    'grande': 'nts\'ihi',
+    'pequeño': 'nts\'its\'i',
+    'nuevo': 'ñ\'ehe',
+    'viejo': 'hñähñä',
+    'bueno': 'hñuni',
+    'malo': 'hña',
+    'feliz': 'nts\'its\'i',
+    'triste': 'nts\'ixu',
+    'alto': 'nts\'ihi',
+    'bajo': 'nts\'ihi',
+    'frío': 'nt\'eni',
+    'caliente': 'ts\'ixu',
+    'uno': '\'na',
+    'dos': 'yoho',
+    'tres': 'hñu',
+    'cuatro': 'gye',
+    'cinco': 'ku',
+    'seis': 'räto',
+    'siete': 'yoto',
+    'ocho': 'hñäto',
+    'nueve': 'guada',
+    'diez': 'räte',
+    'corazón': 'nts\'ixi',
+    'mano': 'yo',
+    'pie': 'na',
+    'cabeza': 'ma',
+    'ojo': 'yä',
+    'boca': 'ñ\'u',
+    'nariz': 'nt\'ä',
+    'oreja': 'ma',
+    'pelo': 'ya',
+    'sangre': 'nts\'ihi',
+    'comer': 'hebe',
+    'beber': 't\'eni',
+    'dormir': 'paja',
+    'caminar': 'hñu',
+    'correr': 'nja\'ä',
+    'hablar': 'hñä',
+    'escuchar': 'mañ\'a',
+    'ver': 'ya',
+    'venir': 'ni',
+    'ir': 'xa',
+    'sentarse': 'ts\'i',
+    'levantarse': 'ndähi',
+    'padre': 'tata',
+    'madre': 'nana',
+    'hermano': 'ndähi',
+    'hermana': 'ndähi',
+    'amigo': 'nts\'ihi',
+    'enemigo': 'nts\'ihi',
+    'sí': 'da',
+    'no': 'än',
+    'yo': 'nuga',
+    'tú': 'nuyu',
+    'él/ella': 'nuni',
+    'nosotros': 'nugu',
+    'ustedes': 'nuguni',
+    'ellos/ellas': 'nunabi',
+    'poco': 'nts\'its\'i',
+    'mucho': 'ndunthi',
+    'pájaro': 'hñi',
+    'perro': 'k\'ani',
+    'gato': 'k\'ani',
+    'árbol': 'hñuni',
+    'flor': 'ts\'ihi',
+    'montaña': 'ndähi',
+    'río': 'ndähi',
+    'camino': 'ya',
+    'campo': 'ndähi',
+    'casa de campo': 'ngu',
+    'lluvia': 'ndähi',
+    'nube': 'ndähi',
+    'viento': 'ndähi',
+    'piedra': 'nts\'ihi',
+    'barro': 'ndähi',
+    'maíz': 'ndähi',
+    'frijol': 'ndähi',
+    'chile': 'ts\'i',
+    'tortilla': 'k\'ani',
   };
 
   const traducirTexto = (texto: string, direccionTraduccion: 'esp-hna' | 'hna-esp') => {
@@ -56,9 +138,9 @@ const Traductor = () => {
   const manejarTraduccion = () => {
     if (direccion === 'esp-hna') {
       const traduccion = traducirTexto(textoEspanol, 'esp-hna');
-      setTextoHnahnu(traduccion);
+      setTextoOtomi(traduccion);
     } else {
-      const traduccion = traducirTexto(textoHnahnu, 'hna-esp');
+      const traduccion = traducirTexto(textoOtomi, 'hna-esp');
       setTextoEspanol(traduccion);
     }
   };
@@ -66,7 +148,7 @@ const Traductor = () => {
   const cambiarDireccion = () => {
     setDireccion(direccion === 'esp-hna' ? 'hna-esp' : 'esp-hna');
     setTextoEspanol('');
-    setTextoHnahnu('');
+    setTextoOtomi('');
   };
 
   const copiarTexto = (texto: string) => {
@@ -74,12 +156,12 @@ const Traductor = () => {
   };
 
   const palabrasComunes = [
-    { esp: 'Hola', hna: 'Jäi' },
-    { esp: 'Gracias', hna: 'Nzaki' },
-    { esp: 'Casa', hna: 'Hñu' },
+    { esp: 'Hola', hna: "Hia / Nts'ofo" },
+    { esp: 'Gracias', hna: 'Hñate / Jamadi (Jamädi)' },
+    { esp: 'Amor', hna: "Nzaya / Nts'aya" },
     { esp: 'Agua', hna: 'Dehe' },
-    { esp: 'Familia', hna: 'Hnini' },
-    { esp: 'Pueblo', hna: 'Bojay' }
+    { esp: 'Niño', hna: 'Nänä' },
+    { esp: 'Pueblo', hna: 'Hñä' }
   ];
 
   return (
@@ -92,9 +174,9 @@ const Traductor = () => {
           <div className="flex justify-center mb-6">
             <Languages className="text-white" size={48} />
           </div>
-          <h2 className="text-5xl font-bold text-white mb-6">Traductor Español - Hñahñu</h2>
+          <h2 className="text-5xl font-bold text-white mb-6">Traductor Español - Otomí</h2>
           <p className="text-xl text-cream max-w-4xl mx-auto leading-relaxed">
-            Preservamos nuestra lengua ancestral del Valle del Mezquital. Traduce entre español y Hñahñu (Otomí).
+            Preservamos nuestra lengua ancestral del Valle del Mezquital. Traduce entre español y otomí.
           </p>
         </div>
 
@@ -104,7 +186,7 @@ const Traductor = () => {
             <div className="bg-gradient-to-r from-terracota to-olive-green p-6 text-white">
               <div className="flex items-center justify-center space-x-4">
                 <span className="font-semibold text-lg">
-                  {direccion === 'esp-hna' ? 'Español' : 'Hñahñu'}
+                  {direccion === 'esp-hna' ? 'Español' : 'Otomí'}
                 </span>
                 <button
                   onClick={cambiarDireccion}
@@ -113,7 +195,7 @@ const Traductor = () => {
                   <ArrowRightLeft size={20} />
                 </button>
                 <span className="font-semibold text-lg">
-                  {direccion === 'esp-hna' ? 'Hñahñu' : 'Español'}
+                  {direccion === 'esp-hna' ? 'Otomí' : 'Español'}
                 </span>
               </div>
             </div>
@@ -124,18 +206,18 @@ const Traductor = () => {
                 {/* Input */}
                 <div className="space-y-4">
                   <label className="block text-sm font-semibold text-olive-green">
-                    {direccion === 'esp-hna' ? 'Español' : 'Hñahñu'}
+                  {direccion === 'esp-hna' ? 'Español' : 'Otomí'}
                   </label>
                   <textarea
-                    value={direccion === 'esp-hna' ? textoEspanol : textoHnahnu}
+                    value={direccion === 'esp-hna' ? textoEspanol : textoOtomi}
                     onChange={(e) => {
                       if (direccion === 'esp-hna') {
                         setTextoEspanol(e.target.value);
                       } else {
-                        setTextoHnahnu(e.target.value);
+                        setTextoOtomi(e.target.value);
                       }
                     }}
-                    placeholder={`Escribe en ${direccion === 'esp-hna' ? 'español' : 'Hñahñu'}...`}
+                    placeholder={`Escribe en ${direccion === 'esp-hna' ? 'español' : 'otomí'}...`}
                     className="w-full h-32 p-4 border-2 border-sky-blue rounded-lg resize-none focus:outline-none focus:border-terracota transition-colors"
                   />
                 </div>
@@ -144,11 +226,11 @@ const Traductor = () => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <label className="block text-sm font-semibold text-olive-green">
-                      {direccion === 'esp-hna' ? 'Hñahñu' : 'Español'}
+                      {direccion === 'esp-hna' ? 'Otomí' : 'Español'}
                     </label>
-                    {(direccion === 'esp-hna' ? textoHnahnu : textoEspanol) && (
+                    {(direccion === 'esp-hna' ? textoOtomi : textoEspanol) && (
                       <button
-                        onClick={() => copiarTexto(direccion === 'esp-hna' ? textoHnahnu : textoEspanol)}
+                        onClick={() => copiarTexto(direccion === 'esp-hna' ? textoOtomi : textoEspanol)}
                         className="text-terracota hover:text-opacity-80 transition-colors"
                         title="Copiar texto"
                       >
@@ -158,7 +240,7 @@ const Traductor = () => {
                   </div>
                   <div className="w-full h-32 p-4 bg-cream border-2 border-gray-200 rounded-lg overflow-y-auto">
                     <p className="text-gray-700">
-                      {direccion === 'esp-hna' ? textoHnahnu : textoEspanol || 'La traducción aparecerá aquí...'}
+                      {direccion === 'esp-hna' ? textoOtomi : textoEspanol || 'La traducción aparecerá aquí...'}
                     </p>
                   </div>
                 </div>
@@ -186,9 +268,9 @@ const Traductor = () => {
                   onClick={() => {
                     if (direccion === 'esp-hna') {
                       setTextoEspanol(palabra.esp);
-                      setTextoHnahnu(palabra.hna);
+                      setTextoOtomi(palabra.hna);
                     } else {
-                      setTextoHnahnu(palabra.hna);
+                      setTextoOtomi(palabra.hna);
                       setTextoEspanol(palabra.esp);
                     }
                   }}
@@ -202,19 +284,19 @@ const Traductor = () => {
 
           {/* Información cultural */}
           <div className="mt-8 bg-white rounded-2xl p-8">
-            <h3 className="text-2xl font-bold text-olive-green mb-4 text-center">Sobre el Hñahñu</h3>
+            <h3 className="text-2xl font-bold text-olive-green mb-4 text-center">Sobre el Otomí</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
               <div>
                 <h4 className="font-semibold text-terracota mb-2">Historia</h4>
                 <p className="text-sm leading-relaxed">
-                  El Hñahñu (también conocido como Otomí) es una lengua indígena de México hablada principalmente 
+                  El otomí es una lengua indígena de México hablada principalmente
                   en el Valle del Mezquital, Hidalgo. Es parte fundamental de nuestra identidad cultural.
                 </p>
               </div>
               <div>
                 <h4 className="font-semibold text-terracota mb-2">Importancia</h4>
                 <p className="text-sm leading-relaxed">
-                  Preservar el Hñahñu es mantener viva nuestra herencia ancestral. Cada palabra lleva consigo 
+                  Preservar el otomí es mantener viva nuestra herencia ancestral. Cada palabra lleva consigo
                   siglos de sabiduría y tradición de nuestros antepasados.
                 </p>
               </div>

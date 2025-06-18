@@ -20,20 +20,32 @@ const Contacto = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const body = `Nombre: ${formData.nombre}%0A` +
-      `Teléfono: ${formData.telefono}%0A%0A${formData.mensaje}`;
-    const mailto = `mailto:contacto@patrianueva.gob.mx?subject=${encodeURIComponent(formData.asunto)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
-    setFormData({ nombre: '', email: '', telefono: '', asunto: '', mensaje: '' });
+    try {
+      const base = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${base}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error('Error');
+      setStatus('success');
+      setFormData({ nombre: '', email: '', telefono: '', asunto: '', mensaje: '' });
+    } catch (err) {
+      console.error('Error al enviar mensaje:', err);
+      setStatus('error');
+    }
   };
 
+  // Coordenadas de Patria Nueva, Santiago de Anaya, Hidalgo
+  const lat = 20.3833;
+  const lng = -99.2167;
+  const query = 'Patria Nueva, Santiago de Anaya, Hidalgo, México';
+
   const abrirMapa = () => {
-    // Coordenadas aproximadas de Patria Nueva, Santiago de Anaya, Hidalgo
-    const lat = 20.3833;
-    const lng = -99.2167;
-    const query = "Patria Nueva, Santiago de Anaya, Hidalgo, México";
     
     // Detectar si es móvil para abrir la app nativa
     const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -97,8 +109,7 @@ const Contacto = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-olive-green">Correo Electrónico</h4>
-                    <p className="text-gray-600">contacto@patrianueva.gob.mx</p>
-                    <p className="text-gray-600">info@patrianueva.com</p>
+                    <p className="text-gray-600">l21200651@pachuca.tecnm.mx</p>
                   </div>
                 </div>
 
@@ -135,7 +146,7 @@ const Contacto = () => {
               {/* Mapa embebido de Google Maps */}
               <div className="relative rounded-lg overflow-hidden mb-4">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14924.123456789!2d-99.2167!3d20.3833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d35a1234567890%3A0x1234567890abcdef!2sPatria%20Nueva%2C%20Santiago%20de%20Anaya%2C%20Hgo.%2C%20Mexico!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+                  src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15000.0!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(query)}!5e0!3m2!1ses!2smx!4v1678888888888!5m2!1ses!2smx`}
                   width="100%"
                   height="300"
                   style={{ border: 0 }}
@@ -258,12 +269,23 @@ const Contacto = () => {
               >
                 <Send size={20} />
                 <span>Enviar Mensaje</span>
-              </button>
-            </form>
+            </button>
+          </form>
 
-            <p className="text-gray-600 text-sm mt-4 text-center">
-              * Campos obligatorios. Responderemos a tu mensaje dentro de 24 horas.
+          {status === 'success' && (
+            <p className="text-green-600 text-center mt-4">
+              Mensaje enviado exitosamente.
             </p>
+          )}
+          {status === 'error' && (
+            <p className="text-red-600 text-center mt-4">
+              Hubo un error al enviar el mensaje.
+            </p>
+          )}
+
+          <p className="text-gray-600 text-sm mt-4 text-center">
+            * Campos obligatorios. Responderemos a tu mensaje dentro de 24 horas.
+          </p>
           </div>
         </div>
 

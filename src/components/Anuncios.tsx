@@ -49,21 +49,12 @@ const Anuncios: React.FC = () => {
     {
       id: 1,
       titulo: 'Gran Feria a "La Preciosa Sangre de Cristo" Patria Nueva 2025',
-      resumen: '¡La fiesta más grande del año! Tradición que late con fuerza en el corazón del Mezquital.',
+      resumen: '',
       fecha: '1 de Julio, 2025',
       categoria: 'Feria Patronal',
       imagen: anuncio1Portada[0] || anuncio1Images[0] || '',
       imagenes: anuncio1Images,
-      contenidoCompleto: '¡La fiesta más grande del año! Tradición que late con fuerza: coronación de la reina, bailes populares y ambiente familiar en el corazón del Mezquital. ¡Nos vemos en la feria!',
-      detalles: [
-        'Ubicación: Centro de Patria Nueva, Santiago de Anaya, Hidalgo',
-        'Coronación de la reina de la feria',
-        'Bailes populares y música en vivo',
-        'Juegos mecánicos para toda la familia',
-        'Charreadas y jaripeo nocturno',
-        'Espectáculos de fuegos artificiales',
-        'Ambiente familiar y comunitario',
-      ],
+      contenidoCompleto: '',
     },
   ];
 
@@ -184,7 +175,8 @@ const Anuncios: React.FC = () => {
               <div className="relative">
                 <ImageCarousel
                   images={anuncioSeleccionado.imagenes ?? [anuncioSeleccionado.imagen]}
-                  className="w-full h-64 md:h-96"
+                  className="w-full max-h-[80vh]"
+                  imgClassName="object-contain"
                 />
                 <button
                   onClick={cerrarModal}
@@ -196,20 +188,10 @@ const Anuncios: React.FC = () => {
                   {anuncioSeleccionado.categoria}
                 </div>
               </div>
-              <div className="p-6 bg-white">
+              <div className="p-6 bg-white text-center">
                 <h3 className="text-2xl font-bold text-olive-green">
                   {anuncioSeleccionado.titulo}
                 </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {anuncioSeleccionado.contenidoCompleto}
-                </p>
-                {anuncioSeleccionado.detalles && (
-                  <ul className="list-disc pl-5 space-y-1 text-gray-600">
-                    {anuncioSeleccionado.detalles.map((item, idx) => (
-                      <li key={idx}>{item}</li>
-                    ))}
-                  </ul>
-                )}
               </div>
             </div>
           </div>

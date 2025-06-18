@@ -20,10 +20,11 @@ const navItems: NavItem[] = [
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState<string>('#inicio');
+
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  /* ---------- 1.  Resaltar sección activa al hacer scroll ---------- */
+  /* ---------- Resaltar la sección visible ---------- */
   useEffect(() => {
     const sections = navItems
       .map(i => document.querySelector<HTMLElement>(i.href))
@@ -32,9 +33,7 @@ const Header: React.FC = () => {
     const observer = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setActive(`#${entry.target.id}`);
-          }
+          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
         });
       },
       { rootMargin: '-40% 0px -50% 0px', threshold: 0 },
@@ -44,7 +43,7 @@ const Header: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  /* ---------- 2.  Cerrar con clic fuera o ESC ---------- */
+  /* ---------- Cerrar con clic fuera o ESC ---------- */
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -57,8 +56,9 @@ const Header: React.FC = () => {
         setMenuOpen(false);
       }
     };
-    const handleEsc = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false);
-
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleEsc);
     return () => {
@@ -67,15 +67,14 @@ const Header: React.FC = () => {
     };
   }, [menuOpen]);
 
-  /* ---------- 3.  Bloquear scroll cuando el panel está abierto ---------- */
+  /* ---------- Bloquear el scroll del body ---------- */
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : 'unset';
+    document.body.style.overflow = menuOpen ? 'hidden' : 'auto';
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = 'auto';
     };
   }, [menuOpen]);
 
-  /* ---------- 4.  Scroll suave a la sección ---------- */
   const goTo = (href: string) => {
     const el = document.querySelector(href);
     el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -84,8 +83,13 @@ const Header: React.FC = () => {
 
   return (
     <>
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-olive-green/70 shadow-md">
+      {/* ---------- HEADER ---------- */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50
+                    backdrop-blur-md bg-olive-green/70 shadow-md
+                    transition-opacity duration-300
+                    ${menuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3">
           {/* Logo */}
           <div className="flex items-center space-x-3 select-none">
@@ -98,28 +102,25 @@ const Header: React.FC = () => {
             </div>
           </div>
 
-          {/* Desktop nav */}
+          {/* Nav escritorio */}
           <nav className="hidden lg:flex space-x-6">
             {navItems.map(item => (
               <button
                 key={item.name}
                 onClick={() => goTo(item.href)}
                 className={`relative px-2 py-1 font-medium transition
-                  ${active === item.href ? 'text-sky-blue' : 'text-white hover:text-sky-blue'}
-                `}
+                            ${active === item.href ? 'text-sky-blue' : 'text-white hover:text-sky-blue'}`}
               >
                 {item.name}
-                {/* subrayado animado */}
                 <span
                   className={`absolute left-0 -bottom-0.5 h-0.5 w-full bg-sky-blue transition-transform
-                    ${active === item.href ? 'scale-x-100' : 'scale-x-0'}
-                  `}
+                              ${active === item.href ? 'scale-x-100' : 'scale-x-0'}`}
                 />
               </button>
             ))}
           </nav>
 
-          {/* Mobile button */}
+          {/* Botón móvil */}
           <button
             ref={buttonRef}
             onClick={() => setMenuOpen(!menuOpen)}
@@ -132,7 +133,7 @@ const Header: React.FC = () => {
         </div>
       </header>
 
-      {/* Overlay */}
+      {/* ---------- OVERLAY ---------- */}
       {menuOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden"
@@ -140,27 +141,27 @@ const Header: React.FC = () => {
         />
       )}
 
-      {/* Mobile panel */}
+      {/* ---------- PANEL LATERAL ---------- */}
       <aside
         ref={menuRef}
         className={`fixed top-0 right-0 z-50 h-full w-72 max-w-[80%] bg-olive-green/90
-          backdrop-blur-md shadow-xl transform transition-transform duration-500 ease-out
-          ${menuOpen ? 'translate-x-0' : 'translate-x-full'}
-        `}
+                    backdrop-blur-md shadow-xl transform transition-transform duration-500 ease-out
+                    ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
         role="dialog"
         aria-label="Navegación principal"
       >
         <div className="flex h-full flex-col items-center pt-10 pb-6 px-6">
-          {/* botón cerrar */}
+          {/* Cerrar */}
           <button
             onClick={() => setMenuOpen(false)}
-            className="absolute top-5 right-5 text-white p-3 rounded-full hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-terracota"
+            className="absolute top-5 right-5 text-white p-3 rounded-full hover:bg-white/20
+                       focus:outline-none focus:ring-2 focus:ring-terracota"
             aria-label="Cerrar menú"
           >
             <X size={30} />
           </button>
 
-          {/* Logo */}
+          {/* Logo dentro del panel */}
           <div className="mb-10 flex items-center space-x-3">
             <div className="h-14 w-14 rounded-full bg-terracota flex items-center justify-center shadow-lg">
               <span className="text-white font-extrabold text-2xl">PN</span>
@@ -168,15 +169,16 @@ const Header: React.FC = () => {
             <span className="text-white text-2xl font-semibold">Patria Nueva</span>
           </div>
 
-          {/* links */}
+          {/* Links */}
           <nav className="flex flex-col items-center space-y-6 w-full">
             {navItems.map(item => (
               <button
                 key={item.name}
                 onClick={() => goTo(item.href)}
                 className={`w-full text-center py-3 text-lg font-medium rounded-lg transition
-                  ${active === item.href ? 'bg-white/15 text-sky-blue' : 'text-white hover:bg-white/10'}
-                `}
+                            ${active === item.href
+                              ? 'bg-white/15 text-sky-blue'
+                              : 'text-white hover:bg-white/10'}`}
               >
                 {item.name}
               </button>
@@ -191,3 +193,4 @@ const Header: React.FC = () => {
 };
 
 export default Header;
+

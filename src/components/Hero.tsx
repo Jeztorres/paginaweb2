@@ -19,7 +19,7 @@ const Hero = () => {
       className="scroll-animation bg-gradient-to-br from-olive-green to-sky-blue min-h-screen flex items-center"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-        <div className="flex flex-col-reverse md:flex-row items-center md:space-x-12">
+        <div className="flex flex-col md:flex-row items-center md:space-x-12">
           <div className="text-center md:text-left md:w-1/2">
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
             Bienvenidos a
@@ -27,9 +27,14 @@ const Hero = () => {
             <span className="text-terracota">Patria Nueva</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-cream font-light mb-12 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-cream font-light mb-8 max-w-4xl mx-auto leading-relaxed">
             "Un hermoso pueblo en el corazón de Hidalgo, donde la tradición y la modernidad se encuentran."
           </p>
+
+          {/* Carousel shown below tagline on mobile */}
+          <div className="mb-10 md:hidden">
+            <HeroCarousel />
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
             <button
@@ -69,7 +74,7 @@ const Hero = () => {
           </div>
           </div>
 
-          <div className="mb-10 md:mb-0 md:w-1/2 w-full">
+          <div className="hidden md:block md:mb-0 md:w-1/2 w-full">
             <HeroCarousel />
           </div>
         </div>

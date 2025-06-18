@@ -50,7 +50,7 @@ const Footer = () => {
               </li>
               <li>
                 <a href="#traductor" className="text-cream hover:text-white transition-colors">
-                  Traductor Hñahñu
+                  Traductor Otomí
                 </a>
               </li>
             </ul>

@@ -20,13 +20,24 @@ const Contacto = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const body = `Nombre: ${formData.nombre}%0A` +
-      `Teléfono: ${formData.telefono}%0A%0A${formData.mensaje}`;
-    const mailto = `mailto:contacto@patrianueva.gob.mx?subject=${encodeURIComponent(formData.asunto)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
-    setFormData({ nombre: '', email: '', telefono: '', asunto: '', mensaje: '' });
+    try {
+      const base = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${base}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error('Error');
+      setStatus('success');
+      setFormData({ nombre: '', email: '', telefono: '', asunto: '', mensaje: '' });
+    } catch (err) {
+      console.error('Error al enviar mensaje:', err);
+      setStatus('error');
+    }
   };
 
   const abrirMapa = () => {
@@ -258,12 +269,23 @@ const Contacto = () => {
               >
                 <Send size={20} />
                 <span>Enviar Mensaje</span>
-              </button>
-            </form>
+            </button>
+          </form>
 
-            <p className="text-gray-600 text-sm mt-4 text-center">
-              * Campos obligatorios. Responderemos a tu mensaje dentro de 24 horas.
+          {status === 'success' && (
+            <p className="text-green-600 text-center mt-4">
+              Mensaje enviado exitosamente.
             </p>
+          )}
+          {status === 'error' && (
+            <p className="text-red-600 text-center mt-4">
+              Hubo un error al enviar el mensaje.
+            </p>
+          )}
+
+          <p className="text-gray-600 text-sm mt-4 text-center">
+            * Campos obligatorios. Responderemos a tu mensaje dentro de 24 horas.
+          </p>
           </div>
         </div>
 

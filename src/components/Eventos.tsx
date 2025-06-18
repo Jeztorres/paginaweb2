@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Calendar, Music, X } from 'lucide-react';
-import ImageCarousel from './ImageCarousel';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 
 interface Evento {
@@ -181,7 +180,11 @@ const Eventos = () => {
                 <h2 className="text-2xl font-bold text-olive-green mb-4 text-center">
                   {eventoSeleccionado.nombre}
                 </h2>
-                <ImageCarousel images={eventoSeleccionado.imagenes || [eventoSeleccionado.imagen]} className="w-full h-64 md:h-96" />
+                <img
+                  src={(eventoSeleccionado.imagenes && eventoSeleccionado.imagenes[0]) || eventoSeleccionado.imagen}
+                  alt={eventoSeleccionado.nombre}
+                  className="w-full h-64 md:h-96 object-cover rounded-2xl"
+                />
               </div>
             </div>
           </div>

@@ -35,7 +35,7 @@ const Header = () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isMenuOpen]); // El efecto se vuelve a ejecutar si isMenuOpen cambia
+  }, [isMenuOpen]);
 
   useEffect(() => {
     // Cuando el menú se abre, evita que el scroll del cuerpo de la página funcione
@@ -74,31 +74,25 @@ const Header = () => {
     setIsMenuOpen(false); // Cierra el menú móvil después de hacer clic en un enlace.
   };
 
-  // --- Colores personalizados basados en la imagen (ajusta estos si es necesario) ---
-  const customGreenStart = '#3C8159'; // Un verde oscuro más cercano al de tu imagen para el degradado
-  const customGreenEnd = '#4A8D63';   // Otro tono de verde para el final del degradado
-  const customDarkGreenHeader = '#346D4B'; // Para el header cuando no hay scroll
-  const customOrange = '#E65100'; // Un naranja terracota más cercano a los ejemplos HTML (si el anterior no fue)
-
   return (
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? `bg-gradient-to-r from-[${customGreenStart}]/90 to-[${customGreenEnd}]/90 backdrop-blur-md shadow-lg`
-          : `bg-gradient-to-r from-[${customGreenStart}]/70 to-[${customGreenEnd}]/70 backdrop-blur-md`
+          ? 'bg-olive-green shadow-lg' // Fondo sólido con olive-green al hacer scroll
+          : 'bg-olive-green/90'       // Ligera transparencia inicial para el header, si lo deseas
+                                      // Si quieres que sea siempre sólido, cambia a 'bg-olive-green'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4 relative">
           {/* Logo y nombre del sitio */}
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-md"
-                 style={{ backgroundColor: customOrange }}> {/* Naranja terracota */}
+            <div className="w-12 h-12 bg-terracota rounded-full flex items-center justify-center shadow-md">
               <span className="text-white font-bold text-xl">PN</span>
             </div>
             <div>
               <h1 className="text-white text-2xl font-bold tracking-wide">Patria Nueva</h1>
-              <p className="text-white/80 text-sm">Santiago de Anaya, Hidalgo</p>
+              <p className="text-sky-blue text-sm">Santiago de Anaya, Hidalgo</p> {/* Usamos sky-blue aquí */}
             </div>
           </div>
 
@@ -108,7 +102,7 @@ const Header = () => {
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
-                className="text-white hover:text-orange-300 transition-colors duration-300 font-medium px-3 py-2 rounded-md"
+                className="text-white hover:text-sky-blue transition-colors duration-300 font-medium px-3 py-2 rounded-md"
               >
                 {item.name}
               </button>
@@ -131,14 +125,13 @@ const Header = () => {
             id="mobile-menu"
             ref={menuRef}
             className={`lg:hidden fixed top-0 right-0 h-full w-3/4 max-w-sm z-50
-                        bg-gradient-to-br from-[${customGreenStart}] to-[${customGreenEnd}]
-                        shadow-2xl transform transition-transform duration-500 ease-out
+                        bg-olive-green shadow-2xl transform transition-transform duration-500 ease-out
                         ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
           >
-            {/* Capa de fondo oscurecida (overlay) - SOLO CUANDO EL MENÚ ESTÁ ABIERTO */}
+            {/* Capa de fondo oscurecida (overlay) - Ahora más opaca y sin blur */}
             {isMenuOpen && (
                 <div
-                    className="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm"
+                    className="fixed inset-0 z-40 bg-black bg-opacity-70" // Opacidad alta, sin blur
                     onClick={() => setIsMenuOpen(false)}
                 ></div>
             )}
@@ -148,16 +141,15 @@ const Header = () => {
                 {/* Botón de cerrar el menú */}
                 <button
                     className="absolute top-6 right-6 text-white p-3 rounded-full hover:bg-white/20 transition-colors
-                                focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                focus:outline-none focus:ring-2 focus:ring-terracota" // Anillo de enfoque terracota
                     onClick={() => setIsMenuOpen(false)}
                     aria-label="Cerrar menú"
                 >
-                    <X size={32} /> {/* Un poco más pequeño que antes, más discreto */}
+                    <X size={32} />
                 </button>
 
                 {/* Logo dentro del menú (opcional) */}
-                <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg mb-8"
-                     style={{ backgroundColor: customOrange }}>
+                <div className="w-16 h-16 bg-terracota rounded-full flex items-center justify-center shadow-lg mb-8">
                   <span className="text-white font-extrabold text-2xl">PN</span>
                 </div>
 
@@ -167,8 +159,8 @@ const Header = () => {
                     <button
                       key={item.name}
                       onClick={() => scrollToSection(item.href)}
-                      className="text-white text-xl font-semibold hover:text-orange-300 transition-colors duration-300
-                                 py-3 px-4 w-full text-center rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300
+                      className="text-white text-xl font-semibold hover:text-terracota transition-colors duration-300 // Hover terracota
+                                 py-3 px-4 w-full text-center rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota // Enfoque terracota
                                  transform hover:scale-105 active:scale-95 transition-transform"
                     >
                       {item.name}
@@ -177,7 +169,7 @@ const Header = () => {
                 </nav>
 
                 {/* Texto adicional al final del menú */}
-                <p className="text-white/60 text-sm mt-auto pt-6 border-t border-white/20 w-full text-center">
+                <p className="text-cream text-sm mt-auto pt-6 border-t border-white/20 w-full text-center"> {/* Cream para texto footer */}
                   Patria Nueva © 2025
                 </p>
             </div>

@@ -83,8 +83,7 @@ const Anuncios: React.FC = () => {
       const base = import.meta.env.VITE_API_URL || '';
       const res = await fetch(`${base}/api/subscribe`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: emailSuscripcion }),
+                    <p className="text-gray-600">l21200651@pachuca.tecnm.mx</p>
       });
       if (!res.ok) throw new Error('Error');
 

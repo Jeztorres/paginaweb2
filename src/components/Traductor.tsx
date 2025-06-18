@@ -10,19 +10,19 @@ const Traductor = () => {
 
   // Diccionario básico para simulación (en un proyecto real esto vendría de una API)
   const diccionario: { [key: string]: string } = {
-    'amor': 'nzaya',
-    'buenos dias': 'ya hne gui ra xudi',
-    'buenas tardes': 'ya hne gui ra ndähi',
-    'buenas noches': 'ya hne gui ra xui',
-    'gracias': 'hñate',
+    'amor': "nzaya / nts'aya",
+    'buenos dias': 'ya hne gui ra xudi / ya xudi',
+    'buenas tardes': 'ya hne gui ra ndähi / ya ndähi',
+    'buenas noches': 'ya hne gui ra xui / ya xui',
+    'gracias': 'hñate / jamadi (jamädi)',
     'agua': 'dehe',
     'hombre': 'nuni',
-    'mujer': 'b\'eñ\'o',
-    'hola': 'hia',
-    'sol': 'hmunts\'i',
+    'mujer': "b'eñ'o / nxutsi",
+    'hola': "hia / nts'ofo",
+    'sol': "hmunts'i",
     'luna': 'zana',
-    'estrella': 'ts\'i',
-    'tierra': 'ximha',
+    'estrella': "ts'i",
+    'tierra': "ximha / xi'i",
     'cielo': 'mahets\'i',
     'fuego': 'zi',
     'aire': 'ndähi',
@@ -156,9 +156,9 @@ const Traductor = () => {
   };
 
   const palabrasComunes = [
-    { esp: 'Hola', hna: 'Hia' },
-    { esp: 'Gracias', hna: 'Hñate' },
-    { esp: 'Amor', hna: 'Nzaya' },
+    { esp: 'Hola', hna: "Hia / Nts'ofo" },
+    { esp: 'Gracias', hna: 'Hñate / Jamadi (Jamädi)' },
+    { esp: 'Amor', hna: "Nzaya / Nts'aya" },
     { esp: 'Agua', hna: 'Dehe' },
     { esp: 'Niño', hna: 'Nänä' },
     { esp: 'Pueblo', hna: 'Hñä' }

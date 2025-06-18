@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 interface ImageCarouselProps {
   images: string[];
   className?: string;
+  imgClassName?: string;
 }
 
 /**
@@ -11,7 +12,7 @@ interface ImageCarouselProps {
  * - Flechas: solo se muestran cuando se pasa el cursor (group‑hover).
  * - Puntos indicadores: 6 px, baja opacidad.
  */
-const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className }) => {
+const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgClassName }) => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -37,7 +38,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className }) => {
           key={i}
           src={src}
           alt={`Imagen carrusel ${i + 1}`}
-          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-700 ${
+          className={`absolute inset-0 w-full h-full ${imgClassName ?? 'object-cover'} transition-opacity duration-700 ${
             i === index ? 'opacity-100' : 'opacity-0'
           }`}
         />

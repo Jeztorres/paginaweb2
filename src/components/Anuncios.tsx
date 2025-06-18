@@ -126,7 +126,8 @@ const Anuncios: React.FC = () => {
             </p>
 
             {suscripcionExitosa ? (
-              <div className="text-center">
+              <div className="p-6 bg-white/95">
+                  imgClassName="object-contain"
                 <CheckCircle className="text-green-500 mx-auto mb-2" size={32} />
                 <p className="text-green-600 font-semibold">¡Suscripción exitosa!</p>
                 <p className="text-gray-600 text-sm">Recibirás notificaciones en tu email.</p>

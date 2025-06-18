@@ -31,6 +31,14 @@ const Anuncios = () => {
     })
   ) as string[];
 
+  // Cargar imagen de portada para la Feria de la Preciosa Sangre (estática)
+  const anuncio1Portada = Object.values(
+    import.meta.glob('../assets/anuncios-portada/feria-preciosa-sangre/*.{jpg,jpeg,png,webp}', {
+      eager: true,
+      as: 'url'
+    })
+  ) as string[];
+
   const anuncios: Anuncio[] = [
     {
       id: 1,
@@ -38,7 +46,7 @@ const Anuncios = () => {
       resumen: "¡La fiesta más grande del año! Tradición que late con fuerza en el corazón del Mezquital.",
       fecha: "1 de Julio, 2025",
       categoria: "Feria Patronal",
-      imagen: anuncio1Images[0] || "",
+      imagen: anuncio1Portada[0] || anuncio1Images[0] || "",
       imagenes: anuncio1Images,
       contenidoCompleto: "¡La fiesta más grande del año! Tradición que late con fuerza: coronación de la reina, bailes populares y ambiente familiar en el corazón del Mezquital. ¡Nos vemos en la feria!",
       detalles: [
@@ -151,11 +159,11 @@ const Anuncios = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
           {anuncios.map((anuncio) => (
             <div key={anuncio.id} className="bg-white bg-opacity-95 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-full max-w-md mx-auto">
-              <div className="relative h-48">
-                <img 
-                  src={anuncio.imagen} 
+              <div className="relative h-64 flex items-center justify-center bg-white">
+                <img
+                  src={anuncio.imagen}
                   alt={anuncio.titulo}
-                  className="w-full h-full object-cover"
+                  className="max-h-full max-w-full object-contain"
                 />
                 <div className={`absolute top-4 left-4 ${getCategoriaColor(anuncio.categoria)} text-white px-3 py-1 rounded-full text-sm font-semibold`}>
                   {anuncio.categoria}
@@ -181,7 +189,7 @@ const Anuncios = () => {
                   className="w-full bg-terracota hover:bg-opacity-90 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300"
                 >
                   <Info size={18} />
-                  <span>Más Información</span>
+                  <span>Conoce el programa y los eventos</span>
                 </button>
               </div>
             </div>
@@ -208,43 +216,6 @@ const Anuncios = () => {
                 </div>
               </div>
 
-              <div className="p-8">
-                <div className="flex items-center text-sm text-gray-500 mb-4">
-                  <Calendar size={16} className="mr-2" />
-                  {anuncioSeleccionado.fecha}
-                </div>
-                
-                <h2 className="text-3xl font-bold text-olive-green mb-6">
-                  {anuncioSeleccionado.titulo}
-                </h2>
-                
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  {anuncioSeleccionado.contenidoCompleto}
-                </p>
-                
-                {anuncioSeleccionado.detalles && (
-                  <div className="bg-cream bg-opacity-80 rounded-lg p-6">
-                    <h3 className="font-bold text-olive-green mb-4">Detalles Importantes:</h3>
-                    <ul className="space-y-2">
-                      {anuncioSeleccionado.detalles.map((detalle, index) => (
-                        <li key={index} className="flex items-center text-gray-700">
-                          <div className="w-2 h-2 bg-terracota rounded-full mr-3"></div>
-                          {detalle}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                
-                <div className="flex justify-end mt-8">
-                  <button
-                    onClick={cerrarModal}
-                    className="bg-olive-green hover:bg-opacity-90 text-white py-3 px-6 rounded-lg font-semibold transition-colors duration-300"
-                  >
-                    Cerrar
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         )}

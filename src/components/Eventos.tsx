@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Calendar, Music, X } from 'lucide-react';
-import ImageCarousel from './ImageCarousel';
+import React from 'react';
+import { Calendar, Music } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 
 interface Evento {
@@ -9,36 +8,19 @@ interface Evento {
   fecha: string;
   descripcion: string;
   imagen: string;
-  imagenes?: string[];
   ubicacion: string;
   hora: string;
 }
 
 const Eventos = () => {
   const ref = useScrollAnimation<HTMLDivElement>();
-  const [modalAbierto, setModalAbierto] = useState(false);
-  const [eventoSeleccionado, setEventoSeleccionado] = useState<Evento | null>(null);
-
-  const eventImagesMap: Record<number, string[]> = {};
-  const imgs = import.meta.glob('../assets/eventos-carousel/evento*/*.{jpg,jpeg,png,webp}', {
-    eager: true,
-    as: 'url'
-  });
-  for (const path in imgs) {
-    const match = path.match(/eventos-carousel\/evento(\d+)\//);
-    if (match) {
-      const id = Number(match[1]);
-      (eventImagesMap[id] ??= []).push(imgs[path] as string);
-    }
-  }
   const eventos: Evento[] = [
     {
       id: 1,
       nombre: "Fiesta de la Santa Cruz",
       fecha: "3 de Mayo",
       descripcion: "Celebración en el cerro Xitphe con bendición de cruces, danzas autóctonas y un ambiente de fe y tradición que une a la comunidad.",
-      imagen: eventImagesMap[1]?.[0] || "",
-      imagenes: eventImagesMap[1],
+      imagen: "/eventos/evento1.jpg",
       ubicacion: "Cerro Xitphe",
       hora: "Todo el día"
     },
@@ -47,8 +29,7 @@ const Eventos = () => {
       nombre: "Conmemoración Ejidal",
       fecha: "15 de Mayo",
       descripcion: "Desfile de tractores, música de banda y actos cívicos para recordar la entrega de parcelas de 1925; encuentro fraterno entre ejidatarios y familias.",
-      imagen: eventImagesMap[2]?.[0] || "",
-      imagenes: eventImagesMap[2],
+      imagen: "/eventos/evento2.jpg",
       ubicacion: "Centro de Patria Nueva",
       hora: "9:00 AM - 6:00 PM"
     },
@@ -57,8 +38,7 @@ const Eventos = () => {
       nombre: "Feria a \"La Preciosa Sangre de Cristo\"",
       fecha: "1 de Julio",
       descripcion: "Feria patronal con charreadas, jaripeo nocturno, juegos mecánicos, bailes populares y espectáculos de fuegos artificiales. Diversión familiar asegurada.",
-      imagen: eventImagesMap[3]?.[0] || "",
-      imagenes: eventImagesMap[3],
+      imagen: "/eventos/evento3.jpg",
       ubicacion: "Centro de Patria Nueva",
       hora: "Todo el día"
     },
@@ -67,8 +47,7 @@ const Eventos = () => {
       nombre: "Grito de Independencia",
       fecha: "15 de Septiembre",
       descripcion: "Verbena cívica con música, luces y pirotecnia que enciende el orgullo patrio y fortalece el sentido de comunidad.",
-      imagen: eventImagesMap[4]?.[0] || "",
-      imagenes: eventImagesMap[4],
+      imagen: "/eventos/evento4.jpg",
       ubicacion: "Plaza Principal",
       hora: "7:00 PM - 12:00 AM"
     },
@@ -77,8 +56,7 @@ const Eventos = () => {
       nombre: "Día de Muertos",
       fecha: "1 y 2 de Noviembre",
       descripcion: "Ofrendas, altares y visita a los panteones para honrar a nuestros seres queridos.",
-      imagen: eventImagesMap[5]?.[0] || "",
-      imagenes: eventImagesMap[5],
+      imagen: "/eventos/evento5.jpg",
       ubicacion: "Panteón y hogares",
       hora: "Todo el día"
     },
@@ -87,8 +65,7 @@ const Eventos = () => {
       nombre: "Encendido del Árbol",
       fecha: "Principios de Diciembre",
       descripcion: "Arranque oficial de la temporada navideña con luces, villancicos y un ambiente familiar que ilumina todo el corazón de Patria Nueva.",
-      imagen: eventImagesMap[6]?.[0] || "",
-      imagenes: eventImagesMap[6],
+      imagen: "/eventos/evento6.jpg",
       ubicacion: "Plaza Principal",
       hora: "6:00 PM - 9:00 PM"
     },
@@ -97,22 +74,11 @@ const Eventos = () => {
       nombre: "Feria a \"La Virgen María de Guadalupe\"",
       fecha: "10-12 de Diciembre",
       descripcion: "Festejo guadalupano con misas solemnes, danzas populares y espectáculos artísticos que reafirman nuestra fe y cultura.",
-      imagen: eventImagesMap[7]?.[0] || "",
-      imagenes: eventImagesMap[7],
+      imagen: "/eventos/evento7.jpg",
       ubicacion: "Iglesia y Plaza",
       hora: "Variable"
     }
   ];
-
-  const abrirModal = (evento: Evento) => {
-    setEventoSeleccionado(evento);
-    setModalAbierto(true);
-  };
-
-  const cerrarModal = () => {
-    setModalAbierto(false);
-    setEventoSeleccionado(null);
-  };
 
   return (
     <div ref={ref} className="scroll-animation py-20 bg-olive-green">
@@ -129,14 +95,10 @@ const Eventos = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {eventos.map((evento) => (
-            <div
-              key={evento.id}
-              onClick={() => abrirModal(evento)}
-              className="cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-            >
+            <div key={evento.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
               <div className="relative h-48">
-                <img
-                  src={evento.imagen}
+                <img 
+                  src={evento.imagen} 
                   alt={evento.nombre}
                   className="w-full h-full object-cover"
                 />
@@ -166,26 +128,6 @@ const Eventos = () => {
             </div>
           ))}
         </div>
-        {modalAbierto && eventoSeleccionado && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-2xl max-w-2xl w-full">
-              <div className="relative">
-                <button
-                  onClick={cerrarModal}
-                  className="absolute top-4 right-4 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-colors"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-              <div className="p-6 pt-12">
-                <h2 className="text-2xl font-bold text-olive-green mb-4 text-center">
-                  {eventoSeleccionado.nombre}
-                </h2>
-                <ImageCarousel images={eventoSeleccionado.imagenes || [eventoSeleccionado.imagen]} className="w-full h-64 md:h-96" />
-              </div>
-            </div>
-          </div>
-        )}
 
         <div className="mt-16 bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 text-center">
           <h3 className="text-2xl font-bold text-white mb-4">¡Participa en Nuestras Tradiciones!</h3>

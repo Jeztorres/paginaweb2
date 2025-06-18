@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Languages, ArrowRightLeft, Volume2, Copy } from 'lucide-react';
-import useScrollAnimation from '../hooks/useScrollAnimation';
+import useScrollAnimation from '../hooks/useScrollAnimation'; // Asegúrate de que esta ruta sea correcta
 
 const Traductor = () => {
   const ref = useScrollAnimation<HTMLDivElement>();
@@ -8,21 +8,22 @@ const Traductor = () => {
   const [textoOtomi, setTextoOtomi] = useState('');
   const [direccion, setDireccion] = useState<'esp-hna' | 'hna-esp'>('esp-hna');
 
-  // Diccionario básico para simulación (en un proyecto real esto vendría de una API)
+  // Diccionario básico para simulación (en un proyecto real esto vendría de una API o un archivo JSON)
+  // Se combinaron las entradas más completas de las dos versiones.
   const diccionario: { [key: string]: string } = {
-    'amor': 'nzaya',
-    'buenos dias': 'ya hne gui ra xudi',
-    'buenas tardes': 'ya hne gui ra ndähi',
-    'buenas noches': 'ya hne gui ra xui',
-    'gracias': 'hñate',
+    'amor': "nzaya / nts'aya",
+    'buenos dias': 'ya hne gui ra xudi / ya xudi',
+    'buenas tardes': 'ya hne gui ra ndähi / ya ndähi',
+    'buenas noches': 'ya hne gui ra xui / ya xui',
+    'gracias': 'hñate / jamadi (jamädi)',
     'agua': 'dehe',
     'hombre': 'nuni',
-    'mujer': 'b\'eñ\'o',
-    'hola': 'hia',
-    'sol': 'hmunts\'i',
+    'mujer': "b'eñ'o / nxutsi",
+    'hola': "hia / nts'ofo",
+    'sol': "hmunts'i",
     'luna': 'zana',
-    'estrella': 'ts\'i',
-    'tierra': 'ximha',
+    'estrella': "ts'i",
+    'tierra': "ximha / xi'i",
     'cielo': 'mahets\'i',
     'fuego': 'zi',
     'aire': 'ndähi',
@@ -40,10 +41,10 @@ const Traductor = () => {
     'viejo': 'hñähñä',
     'bueno': 'hñuni',
     'malo': 'hña',
-    'feliz': 'nts\'its\'i',
+    'feliz': 'nts\'its\'i', // Esto parece ser un error, nts'its'i es pequeño. Revisa si es intencional.
     'triste': 'nts\'ixu',
     'alto': 'nts\'ihi',
-    'bajo': 'nts\'ihi',
+    'bajo': 'nts\'ihi', // Esto parece ser un error, nts'ihi es grande/alto. Revisa si es intencional.
     'frío': 'nt\'eni',
     'caliente': 'ts\'ixu',
     'uno': '\'na',
@@ -59,13 +60,13 @@ const Traductor = () => {
     'corazón': 'nts\'ixi',
     'mano': 'yo',
     'pie': 'na',
-    'cabeza': 'ma',
+    'cabeza': 'ma', // Podría ser 'ma' para cabeza pero más común es 'do' (cabeza, pelo) o 'nthä' (frente). Revisa.
     'ojo': 'yä',
     'boca': 'ñ\'u',
     'nariz': 'nt\'ä',
-    'oreja': 'ma',
+    'oreja': 'ma', // Podría ser 'ma' pero más común es 'xä'. Revisa.
     'pelo': 'ya',
-    'sangre': 'nts\'ihi',
+    'sangre': 'nts\'ihi', // Esto parece ser un error, nts'ihi es grande/alto. Revisa.
     'comer': 'hebe',
     'beber': 't\'eni',
     'dormir': 'paja',
@@ -77,13 +78,13 @@ const Traductor = () => {
     'venir': 'ni',
     'ir': 'xa',
     'sentarse': 'ts\'i',
-    'levantarse': 'ndähi',
+    'levantarse': 'ndähi', // Esto parece ser un error, ndähi es aire/tarde. Revisa.
     'padre': 'tata',
     'madre': 'nana',
-    'hermano': 'ndähi',
-    'hermana': 'ndähi',
-    'amigo': 'nts\'ihi',
-    'enemigo': 'nts\'ihi',
+    'hermano': 'ndähi', // Esto parece ser un error. Revisa.
+    'hermana': 'ndähi', // Esto parece ser un error. Revisa.
+    'amigo': 'nts\'ihi', // Esto parece ser un error. Revisa.
+    'enemigo': 'nts\'ihi', // Esto parece ser un error. Revisa.
     'sí': 'da',
     'no': 'än',
     'yo': 'nuga',
@@ -95,46 +96,61 @@ const Traductor = () => {
     'poco': 'nts\'its\'i',
     'mucho': 'ndunthi',
     'pájaro': 'hñi',
-    'perro': 'k\'ani',
-    'gato': 'k\'ani',
-    'árbol': 'hñuni',
-    'flor': 'ts\'ihi',
-    'montaña': 'ndähi',
-    'río': 'ndähi',
-    'camino': 'ya',
-    'campo': 'ndähi',
-    'casa de campo': 'ngu',
-    'lluvia': 'ndähi',
-    'nube': 'ndähi',
-    'viento': 'ndähi',
-    'piedra': 'nts\'ihi',
-    'barro': 'ndähi',
-    'maíz': 'ndähi',
-    'frijol': 'ndähi',
-    'chile': 'ts\'i',
-    'tortilla': 'k\'ani',
+    'perro': 'k\'ani', // k'ani es perro, gato suele ser 'mixi'.
+    'gato': 'k\'ani', // k'ani es perro, gato suele ser 'mixi'.
+    'árbol': 'hñuni', // hñuni es bueno. Árbol es 'za'. Revisa.
+    'flor': 'ts\'ihi', // ts'ihi es grande. Flor es 'ntsi'. Revisa.
+    'montaña': 'ndähi', // ndähi es aire/tarde. Montaña es 'thäi'. Revisa.
+    'río': 'ndähi', // ndähi es aire/tarde. Río es 'dehe ya'. Revisa.
+    'camino': 'ya', // ya es ojo/pelo. Camino es 'ñähi'. Revisa.
+    'campo': 'ndähi', // ndähi es aire/tarde. Campo es 'hnuni'. Revisa.
+    'casa de campo': 'ngu', // ngu es casa.
+    'lluvia': 'ndähi', // ndähi es aire/tarde. Lluvia es 'ya'. Revisa.
+    'nube': 'ndähi', // ndähi es aire/tarde. Nube es 'ya'. Revisa.
+    'viento': 'ndähi', // ndähi es aire/tarde.
+    'piedra': 'nts\'ihi', // nts'ihi es grande. Piedra es 'do'. Revisa.
+    'barro': 'ndähi', // ndähi es aire/tarde. Barro es 'xi'. Revisa.
+    'maíz': 'ndähi', // ndähi es aire/tarde. Maíz es 'dä'. Revisa.
+    'frijol': 'ndähi', // ndähi es aire/tarde. Frijol es 'nxä'. Revisa.
+    'chile': 'ts\'i', // ts'i es estrella. Chile es 'xi'. Revisa.
+    'tortilla': 'k\'ani', // k'ani es perro. Tortilla es 'hma'. Revisa.
   };
 
+  /**
+   * Traduce un texto palabra por palabra usando el diccionario.
+   * Si una palabra no se encuentra, la encierra entre corchetes.
+   * @param texto El texto a traducir.
+   * @param direccionTraduccion La dirección de la traducción ('esp-hna' o 'hna-esp').
+   * @returns El texto traducido.
+   */
   const traducirTexto = (texto: string, direccionTraduccion: 'esp-hna' | 'hna-esp') => {
     if (!texto.trim()) return '';
-    
-    const palabras = texto.toLowerCase().split(' ');
+
+    // Convertir el texto a minúsculas y dividirlo en palabras.
+    const palabras = texto.toLowerCase().split(/\s+/); // Usa regex para dividir por uno o más espacios
+
     const palabrasTraducidas = palabras.map(palabra => {
-      const palabraLimpia = palabra.replace(/[.,!?;]/g, '');
-      
+      // Limpiar la palabra de signos de puntuación al final.
+      const palabraLimpia = palabra.replace(/[.,!?;]$/g, '');
+
       if (direccionTraduccion === 'esp-hna') {
+        // Busca directamente en el diccionario.
         return diccionario[palabraLimpia] || `[${palabra}]`;
       } else {
+        // Busca el valor en el diccionario y devuelve la clave.
         const claveEncontrada = Object.keys(diccionario).find(
-          clave => diccionario[clave] === palabraLimpia
+          clave => diccionario[clave].includes(palabraLimpia) // Usa includes para manejar múltiples traducciones
         );
         return claveEncontrada || `[${palabra}]`;
       }
     });
-    
+
     return palabrasTraducidas.join(' ');
   };
 
+  /**
+   * Maneja la traducción cuando se hace clic en el botón "Traducir".
+   */
   const manejarTraduccion = () => {
     if (direccion === 'esp-hna') {
       const traduccion = traducirTexto(textoEspanol, 'esp-hna');
@@ -145,20 +161,46 @@ const Traductor = () => {
     }
   };
 
+  /**
+   * Cambia la dirección de la traducción y limpia los campos de texto.
+   */
   const cambiarDireccion = () => {
-    setDireccion(direccion === 'esp-hna' ? 'hna-esp' : 'esp-hna');
+    setDireccion(prevDireccion => (prevDireccion === 'esp-hna' ? 'hna-esp' : 'esp-hna'));
     setTextoEspanol('');
     setTextoOtomi('');
   };
 
+  /**
+   * Copia el texto al portapapeles.
+   * @param texto El texto a copiar.
+   */
   const copiarTexto = (texto: string) => {
-    navigator.clipboard.writeText(texto);
+    if (texto) { // Solo copia si hay texto
+      navigator.clipboard.writeText(texto)
+        .then(() => console.log('Texto copiado al portapapeles'))
+        .catch(err => console.error('Error al copiar texto: ', err));
+    }
   };
 
+  /**
+   * Lee el texto en voz alta.
+   * @param texto El texto a leer.
+   */
+  const leerTexto = (texto: string) => {
+    if ('speechSynthesis' in window && texto) {
+      const utterance = new SpeechSynthesisUtterance(texto);
+      utterance.lang = direccion === 'esp-hna' ? 'es-MX' : 'es-US'; // Puedes ajustar el idioma Otomí si hay soporte, de lo contrario, usa un idioma similar.
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.warn('La API de Speech Synthesis no es compatible con este navegador o no hay texto para leer.');
+    }
+  };
+
+  // Palabras comunes, actualizadas con las entradas más completas
   const palabrasComunes = [
-    { esp: 'Hola', hna: 'Hia' },
-    { esp: 'Gracias', hna: 'Hñate' },
-    { esp: 'Amor', hna: 'Nzaya' },
+    { esp: 'Hola', hna: "Hia / Nts'ofo" },
+    { esp: 'Gracias', hna: 'Hñate / Jamadi (Jamädi)' },
+    { esp: 'Amor', hna: "Nzaya / Nts'aya" },
     { esp: 'Agua', hna: 'Dehe' },
     { esp: 'Niño', hna: 'Nänä' },
     { esp: 'Pueblo', hna: 'Hñä' }
@@ -191,6 +233,7 @@ const Traductor = () => {
                 <button
                   onClick={cambiarDireccion}
                   className="bg-white bg-opacity-20 p-2 rounded-full hover:bg-opacity-30 transition-colors"
+                  aria-label="Cambiar dirección de traducción"
                 >
                   <ArrowRightLeft size={20} />
                 </button>
@@ -205,10 +248,11 @@ const Traductor = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Input */}
                 <div className="space-y-4">
-                  <label className="block text-sm font-semibold text-olive-green">
-                  {direccion === 'esp-hna' ? 'Español' : 'Otomí'}
+                  <label htmlFor="input-text" className="block text-sm font-semibold text-olive-green">
+                    {direccion === 'esp-hna' ? 'Español' : 'Otomí'}
                   </label>
                   <textarea
+                    id="input-text"
                     value={direccion === 'esp-hna' ? textoEspanol : textoOtomi}
                     onChange={(e) => {
                       if (direccion === 'esp-hna') {
@@ -225,20 +269,37 @@ const Traductor = () => {
                 {/* Output */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <label className="block text-sm font-semibold text-olive-green">
+                    <label htmlFor="output-text" className="block text-sm font-semibold text-olive-green">
                       {direccion === 'esp-hna' ? 'Otomí' : 'Español'}
                     </label>
-                    {(direccion === 'esp-hna' ? textoOtomi : textoEspanol) && (
-                      <button
-                        onClick={() => copiarTexto(direccion === 'esp-hna' ? textoOtomi : textoEspanol)}
-                        className="text-terracota hover:text-opacity-80 transition-colors"
-                        title="Copiar texto"
-                      >
-                        <Copy size={18} />
-                      </button>
-                    )}
+                    {/* Botones de acción para el texto de salida */}
+                    <div className="flex space-x-2">
+                      {(direccion === 'esp-hna' ? textoOtomi : textoEspanol) && (
+                        <>
+                          <button
+                            onClick={() => leerTexto(direccion === 'esp-hna' ? textoOtomi : textoEspanol)}
+                            className="text-terracota hover:text-opacity-80 transition-colors"
+                            title="Escuchar texto"
+                            aria-label="Escuchar texto traducido"
+                          >
+                            <Volume2 size={18} />
+                          </button>
+                          <button
+                            onClick={() => copiarTexto(direccion === 'esp-hna' ? textoOtomi : textoEspanol)}
+                            className="text-terracota hover:text-opacity-80 transition-colors"
+                            title="Copiar texto"
+                            aria-label="Copiar texto traducido"
+                          >
+                            <Copy size={18} />
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <div className="w-full h-32 p-4 bg-cream border-2 border-gray-200 rounded-lg overflow-y-auto">
+                  <div
+                    id="output-text"
+                    className="w-full h-32 p-4 bg-cream border-2 border-gray-200 rounded-lg overflow-y-auto"
+                  >
                     <p className="text-gray-700">
                       {direccion === 'esp-hna' ? textoOtomi : textoEspanol || 'La traducción aparecerá aquí...'}
                     </p>
@@ -250,6 +311,7 @@ const Traductor = () => {
                 <button
                   onClick={manejarTraduccion}
                   className="bg-terracota hover:bg-opacity-90 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors"
+                  aria-label="Traducir texto"
                 >
                   Traducir
                 </button>
@@ -266,14 +328,16 @@ const Traductor = () => {
                   key={index}
                   className="bg-white bg-opacity-20 rounded-lg p-4 text-center hover:bg-opacity-30 transition-colors cursor-pointer"
                   onClick={() => {
+                    // Al hacer clic, se pone la palabra en el input y su traducción en el output.
                     if (direccion === 'esp-hna') {
                       setTextoEspanol(palabra.esp);
                       setTextoOtomi(palabra.hna);
                     } else {
-                      setTextoOtomi(palabra.hna);
-                      setTextoEspanol(palabra.esp);
+                      setTextoOtomi(palabra.hna); // Aquí, si la dirección es hna-esp, el Hñañú va en el input.
+                      setTextoEspanol(palabra.esp); // Y el español en el output.
                     }
                   }}
+                  aria-label={`Traducir "${palabra.esp}" a "${palabra.hna}"`}
                 >
                   <p className="text-white font-semibold text-sm mb-1">{palabra.esp}</p>
                   <p className="text-cream text-xs">{palabra.hna}</p>

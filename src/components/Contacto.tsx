@@ -42,16 +42,24 @@ const Contacto: React.FC = () => {
     }));
   };
 
+  // Google Forms integration
+  const GOOGLE_FORM_ACTION =
+    'https://docs.google.com/forms/d/e/1FAIpQLScYw6yq_60ol0RuTkUwntgcIkI3j2cdCtXewxwbNoa1gtjRmw/formResponse';
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formDataGoogle = new FormData();
+    formDataGoogle.append('entry.241409678', formData.nombre);
+    formDataGoogle.append('entry.471509056', formData.email);
+    formDataGoogle.append('entry.594078676', formData.telefono);
+    formDataGoogle.append('entry.1075442742', formData.asunto);
+    formDataGoogle.append('entry.1370799519', formData.mensaje);
     try {
-      const base = import.meta.env.VITE_API_URL || '';
-      const res = await fetch(`${base}/api/contact`, {
+      await fetch(GOOGLE_FORM_ACTION, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        mode: 'no-cors',
+        body: formDataGoogle,
       });
-      if (!res.ok) throw new Error('Error');
       setStatus('success');
       setFormData({ nombre: '', email: '', telefono: '', asunto: '', mensaje: '' });
     } catch (err) {
@@ -60,10 +68,11 @@ const Contacto: React.FC = () => {
     }
   };
 
-  // Coordenadas de Patria Nueva, Santiago de Anaya, Hidalgo
-  const lat = 20.3833;
-  const lng = -99.2167;
-  const query = 'Patria Nueva, Santiago de Anaya, Hidalgo, México';
+  // Coordenadas exactas de Patria Nueva, Santiago de Anaya, Hidalgo
+  // 20° 22’ 15.480” N = 20.370967, 99° 03’ 06.397” O = -99.051777
+  const lat = 20.370967;
+  const lng = -99.051777;
+  const query = 'Patria Nueva, Santiago de Anaya, Hidalgo';
 
   const abrirMapa = () => {
     const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -111,8 +120,7 @@ const Contacto: React.FC = () => {
                 <div>
                   <h4 className="font-semibold text-olive-green">Dirección</h4>
                   <p className="text-gray-600">
-                    Patria Nueva, Santiago de Anaya
-                    <br />
+                    Patria Nueva, Municipio de Santiago de Anaya<br />
                     Hidalgo, México, C.P. 42350
                   </p>
                 </div>
@@ -125,8 +133,7 @@ const Contacto: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-olive-green">Teléfono</h4>
-                  <p className="text-gray-600">+52 771 234 5677</p>
-                  <p className="text-gray-600 text-sm">Lunes a Viernes: 9:00 AM - 5:00 PM</p>
+                  <p className="text-gray-600"></p>
                 </div>
               </div>
 
@@ -137,7 +144,7 @@ const Contacto: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-olive-green">Correo Electrónico</h4>
-                  <p className="text-gray-600">l21200651@pachuca.tecnm.mx</p>
+                  <p className="text-gray-600"></p>
                 </div>
               </div>
 
@@ -179,7 +186,7 @@ const Contacto: React.FC = () => {
               <h3 className="text-2xl font-bold text-olive-green mb-6">Nuestra Ubicación</h3>
               <div className="relative rounded-lg overflow-hidden mb-4">
                 <iframe
-                  src={`https://www.google.com/maps?q=${lat},${lng}&hl=es&z=14&output=embed`}
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(query)}&hl=es&z=14&output=embed`}
                   width="100%"
                   height="300"
                   style={{ border: 0 }}

@@ -70,7 +70,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <Mail size={16} className="text-sky-blue" />
-                <span className="text-cream">contacto@patrianueva.gob.mx</span>
+                <span className="text-cream">l21200651@pachuca.tecnm.mx</span>
               </div>
             </div>
           </div>

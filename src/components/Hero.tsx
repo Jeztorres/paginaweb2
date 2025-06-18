@@ -27,9 +27,14 @@ const Hero = () => {
             <span className="text-terracota">Patria Nueva</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-cream font-light mb-12 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-cream font-light mb-8 max-w-4xl mx-auto leading-relaxed">
             "Un hermoso pueblo en el corazón de Hidalgo, donde la tradición y la modernidad se encuentran."
           </p>
+
+          {/* Carousel shown below tagline on mobile */}
+          <div className="mb-10 md:hidden">
+            <HeroCarousel />
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
             <button
@@ -69,7 +74,7 @@ const Hero = () => {
           </div>
           </div>
 
-          <div className="mb-10 md:mb-0 md:w-1/2 w-full">
+          <div className="hidden md:block md:mb-0 md:w-1/2 w-full">
             <HeroCarousel />
           </div>
         </div>

@@ -34,10 +34,8 @@ const Header = () => {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-gradient-to-r from-olive-green/90 to-sky-blue/90 backdrop-blur-md shadow-lg'
-          : 'bg-gradient-to-r from-olive-green/70 to-sky-blue/70 backdrop-blur-md'
+      className={`sticky top-0 z-50 w-full bg-gradient-to-r from-terracota via-olive-green to-sky-blue transition-all duration-300 ${
+        isScrolled ? 'shadow-lg' : ''
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,7 +71,7 @@ const Header = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="lg:hidden fixed inset-0 bg-gradient-to-b from-olive-green to-sky-blue bg-opacity-95 backdrop-blur-md flex flex-col items-center justify-center space-y-4">
+          <div className="lg:hidden fixed inset-0 bg-gradient-to-b from-terracota via-olive-green to-sky-blue flex flex-col items-center justify-center space-y-6">
             <button
               className="absolute top-4 right-4 text-white p-2"
               onClick={() => setIsMenuOpen(false)}

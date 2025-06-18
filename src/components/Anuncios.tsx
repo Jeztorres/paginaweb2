@@ -31,6 +31,14 @@ const Anuncios = () => {
     })
   ) as string[];
 
+  // Cargar imagen de portada para el anuncio 1 (estática)
+  const anuncio1Portada = Object.values(
+    import.meta.glob('../assets/anuncios-portada/anuncio1/*.{jpg,jpeg,png,webp}', {
+      eager: true,
+      as: 'url'
+    })
+  ) as string[];
+
   const anuncios: Anuncio[] = [
     {
       id: 1,
@@ -38,7 +46,7 @@ const Anuncios = () => {
       resumen: "¡La fiesta más grande del año! Tradición que late con fuerza en el corazón del Mezquital.",
       fecha: "1 de Julio, 2025",
       categoria: "Feria Patronal",
-      imagen: anuncio1Images[0] || "",
+      imagen: anuncio1Portada[0] || anuncio1Images[0] || "",
       imagenes: anuncio1Images,
       contenidoCompleto: "¡La fiesta más grande del año! Tradición que late con fuerza: coronación de la reina, bailes populares y ambiente familiar en el corazón del Mezquital. ¡Nos vemos en la feria!",
       detalles: [
@@ -152,10 +160,10 @@ const Anuncios = () => {
           {anuncios.map((anuncio) => (
             <div key={anuncio.id} className="bg-white bg-opacity-95 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-full max-w-md mx-auto">
               <div className="relative h-48">
-                <img 
-                  src={anuncio.imagen} 
+                <img
+                  src={anuncio.imagen}
                   alt={anuncio.titulo}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
                 <div className={`absolute top-4 left-4 ${getCategoriaColor(anuncio.categoria)} text-white px-3 py-1 rounded-full text-sm font-semibold`}>
                   {anuncio.categoria}

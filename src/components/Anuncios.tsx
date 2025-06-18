@@ -31,9 +31,9 @@ const Anuncios = () => {
     })
   ) as string[];
 
-  // Cargar imagen de portada para el anuncio 1 (estática)
+  // Cargar imagen de portada para la Feria de la Preciosa Sangre (estática)
   const anuncio1Portada = Object.values(
-    import.meta.glob('../assets/anuncios-portada/anuncio1/*.{jpg,jpeg,png,webp}', {
+    import.meta.glob('../assets/anuncios-portada/feria-preciosa-sangre/*.{jpg,jpeg,png,webp}', {
       eager: true,
       as: 'url'
     })
@@ -189,7 +189,7 @@ const Anuncios = () => {
                   className="w-full bg-terracota hover:bg-opacity-90 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300"
                 >
                   <Info size={18} />
-                  <span>Más Información</span>
+                  <span>Conoce el programa y los eventos</span>
                 </button>
               </div>
             </div>
@@ -216,43 +216,6 @@ const Anuncios = () => {
                 </div>
               </div>
 
-              <div className="p-8">
-                <div className="flex items-center text-sm text-gray-500 mb-4">
-                  <Calendar size={16} className="mr-2" />
-                  {anuncioSeleccionado.fecha}
-                </div>
-                
-                <h2 className="text-3xl font-bold text-olive-green mb-6">
-                  {anuncioSeleccionado.titulo}
-                </h2>
-                
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  {anuncioSeleccionado.contenidoCompleto}
-                </p>
-                
-                {anuncioSeleccionado.detalles && (
-                  <div className="bg-cream bg-opacity-80 rounded-lg p-6">
-                    <h3 className="font-bold text-olive-green mb-4">Detalles Importantes:</h3>
-                    <ul className="space-y-2">
-                      {anuncioSeleccionado.detalles.map((detalle, index) => (
-                        <li key={index} className="flex items-center text-gray-700">
-                          <div className="w-2 h-2 bg-terracota rounded-full mr-3"></div>
-                          {detalle}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                
-                <div className="flex justify-end mt-8">
-                  <button
-                    onClick={cerrarModal}
-                    className="bg-olive-green hover:bg-opacity-90 text-white py-3 px-6 rounded-lg font-semibold transition-colors duration-300"
-                  >
-                    Cerrar
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         )}

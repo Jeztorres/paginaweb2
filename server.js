@@ -46,6 +46,16 @@ app.post('/api/subscribe', async (req, res) => {
       subject: 'Nuevo suscriptor',
       text: `Nuevo correo suscrito: ${email}`,
     });
+
+    if (email) {
+      await transporter.sendMail({
+        from: EMAIL_USER,
+        to: email,
+        subject: 'Bienvenido a Patria Nueva',
+        text: 'Gracias por suscribirte a nuestro boletín.',
+      });
+    }
+
     res.json({ success: true });
   } catch (err) {
     console.error('Error sending subscription email:', err);

@@ -12,6 +12,7 @@ El servidor utiliza `nodemailer` para enviar correos. Configure las siguientes v
 - `EMAIL_PASS` – Contraseña o token de la cuenta remitente.
 - `EMAIL_TO`   – Dirección que recibirá los mensajes (por defecto `l21200651@pachuca.tecnm.mx`).
 - `PORT`       – Puerto en el que se ejecutará el servidor (opcional, por defecto 3001).
+- `VITE_API_URL` – (opcional) URL base del API cuando el front y el servidor están en dominios distintos.
 
 ## Comandos útiles
 
@@ -20,4 +21,5 @@ El servidor utiliza `nodemailer` para enviar correos. Configure las siguientes v
 - `npm run build`   – Compila la aplicación para producción.
 - `npm run lint`    – Ejecuta ESLint.
 
-Una vez iniciado el servidor (por defecto en `http://localhost:3001`), los formularios de contacto y de suscripción enviarán la información a este endpoint y se reenviará un correo a la dirección configurada.
+Los formularios de contacto y suscripción envían datos a `/api/*`.  
+Si el servidor se aloja en un dominio distinto, defina `VITE_API_URL` en un archivo `.env` para apuntar a dicho dominio (por ejemplo `https://midominio.com`).

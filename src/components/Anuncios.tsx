@@ -79,7 +79,8 @@ const Anuncios: React.FC = () => {
     if (!emailSuscripcion.trim()) return;
 
     try {
-      const res = await fetch('http://localhost:3001/api/subscribe', {
+      const base = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${base}/api/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: emailSuscripcion }),

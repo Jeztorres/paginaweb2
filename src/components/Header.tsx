@@ -162,9 +162,7 @@ const Header: React.FC = () => {
 
           {/* Logo dentro del panel */}
           <div className="mb-10 flex items-center space-x-3">
-            <div className="h-14 w-14 rounded-full bg-terracota flex items-center justify-center shadow-lg">
-              <span className="text-white font-extrabold text-2xl">PN</span>
-            </div>
+            <img src={logo} alt="Logo Patria Nueva" className="h-14 w-14 rounded-full shadow-lg" />
             <span className="text-white text-2xl font-semibold">Patria Nueva</span>
           </div>
 

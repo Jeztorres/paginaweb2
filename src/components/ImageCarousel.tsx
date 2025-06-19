@@ -74,7 +74,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
             />
             <button
               onClick={() => { setModalOpen(false); setPaused(false); }}
-              className="absolute top-2 right-2 z-10 bg-black bg-opacity-60 rounded-full p-2 text-white focus:outline-none focus:ring-2 focus:ring-white"
+              className="absolute top-2 right-2 z-10 bg-black/50 rounded-full p-2 text-white hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-white"
               style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
             >
               <X size={28} />
@@ -84,14 +84,14 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
               <>
                 <button
                   onClick={() => setModalIndex((modalIndex - 1 + images.length) % images.length)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-60 rounded-full p-3 text-white z-10 hover:bg-opacity-80 focus:outline-none"
+                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/40 rounded-full p-2 sm:p-3 text-white z-10 hover:bg-black/60 focus:outline-none"
                   style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
                 >
                   &#8592;
                 </button>
                 <button
                   onClick={() => setModalIndex((modalIndex + 1) % images.length)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-60 rounded-full p-3 text-white z-10 hover:bg-opacity-80 focus:outline-none"
+                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/40 rounded-full p-2 sm:p-3 text-white z-10 hover:bg-black/60 focus:outline-none"
                   style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
                 >
                   &#8594;

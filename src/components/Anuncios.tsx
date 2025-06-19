@@ -27,6 +27,7 @@ const Anuncios: React.FC = () => {
 
   const [modalAbierto, setModalAbierto] = useState(false);
   const [anuncioSeleccionado, setAnuncioSeleccionado] = useState<Anuncio | null>(null);
+  const [modalOffset, setModalOffset] = useState(0);
   const [emailSuscripcion, setEmailSuscripcion] = useState('');
   const [suscripcionExitosa, setSuscripcionExitosa] = useState(false);
   const [mostrarSuscripcion, setMostrarSuscripcion] = useState(false);
@@ -63,8 +64,9 @@ const Anuncios: React.FC = () => {
   ];
 
   // Funciones de UI
-  const abrirModal = (anuncio: Anuncio) => {
+  const abrirModal = (anuncio: Anuncio, offset: number) => {
     setAnuncioSeleccionado(anuncio);
+    setModalOffset(offset);
     setModalAbierto(true);
   };
 
@@ -200,7 +202,12 @@ const Anuncios: React.FC = () => {
                   {anuncio.resumen || 'Haz clic para ver más detalles sobre este anuncio.'}
                 </p>
                 <button
-                  onClick={() => abrirModal(anuncio)}
+                  onClick={(e) =>
+                    abrirModal(
+                      anuncio,
+                      (e.currentTarget as HTMLElement).getBoundingClientRect().top
+                    )
+                  }
                   className="w-full bg-terracota hover:bg-opacity-90 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300"
                 >
                   <Info size={18} />
@@ -213,7 +220,10 @@ const Anuncios: React.FC = () => {
 
         {/* Modal de Anuncio */}
         {modalAbierto && anuncioSeleccionado && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center p-4 z-50"
+            style={{ paddingTop: modalOffset }}
+          >
             {/* Fondo general del modal (verde transparente) */}
             <div className="rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto bg-olive-green/20 relative shadow-2xl backdrop-blur-sm">
               {/* Close Button */}

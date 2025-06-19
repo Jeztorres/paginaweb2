@@ -31,11 +31,6 @@ const Hero = () => {
             "Un hermoso pueblo en el corazón de Hidalgo, donde la tradición y la modernidad se encuentran."
           </p>
 
-          {/* Carousel shown below tagline on mobile */}
-          <div className="mb-10 md:hidden">
-            <HeroCarousel />
-          </div>
-
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
             <button
               onClick={() => scrollToSection('#historia')}
@@ -74,7 +69,7 @@ const Hero = () => {
           </div>
           </div>
 
-          <div className="hidden md:block md:mb-0 md:w-1/2 w-full">
+          <div className="w-full md:w-1/2 mt-10 md:mt-0">
             <HeroCarousel />
           </div>
         </div>

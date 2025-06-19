@@ -1,12 +1,20 @@
 import React from 'react';
 import { Clock, MapPin, Users, Book } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
+import ImageCarousel from './ImageCarousel';
 
 const historiaImages = Object.values(
   import.meta.glob('../assets/historia/*.{jpg,jpeg,png,webp}', {
     eager: true,
     as: 'url',
   })
+) as string[];
+
+const historiaCarouselImages = Object.values(
+  import.meta.glob(
+    '../assets/historia-carousel/*.{jpg,jpeg,png,webp}',
+    { eager: true, as: 'url' }
+  )
 ) as string[];
 
 const Historia = () => {
@@ -102,6 +110,18 @@ const Historia = () => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Carousel de fotos históricas */}
+            <div className="mb-6">
+              <ImageCarousel
+                images={historiaCarouselImages}
+                className="w-full h-64 md:h-80 rounded-2xl overflow-hidden shadow-lg"
+                imgClassName="w-full h-full object-contain rounded-2xl"
+              />
+              <p className="text-center text-gray-600 text-sm mt-2">
+                Haz clic en cualquier imagen para verla en grande y navegar entre las fotos.
+              </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

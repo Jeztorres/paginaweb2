@@ -1,4 +1,3 @@
-import React from 'react';
 import ImageCarousel from './ImageCarousel';
 
 // Import all images from the hero-carousel assets folder
@@ -13,7 +12,11 @@ const HeroCarousel = () => {
   if (images.length === 0) return null;
 
   return (
-    <ImageCarousel images={images} className="w-full h-64 md:h-96 shadow-lg" />
+    <ImageCarousel
+      images={images}
+      className="w-full h-64 md:h-96 shadow-lg rounded-lg overflow-hidden"
+      imgClassName="object-cover rounded-lg"
+    />
   );
 };
 

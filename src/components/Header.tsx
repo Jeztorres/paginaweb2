@@ -1,6 +1,7 @@
 // components/Header.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X } from 'lucide-react';
+import logo from '../assets/logo/logo.png';
 
 interface NavItem {
   name: string;
@@ -93,12 +94,10 @@ const Header: React.FC = () => {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3">
           {/* Logo */}
           <div className="flex items-center space-x-3 select-none">
-            <div className="h-11 w-11 rounded-full bg-terracota flex items-center justify-center shadow">
-              <span className="text-white font-bold text-lg">PN</span>
-            </div>
+            <img src={logo} alt="Logo Patria Nueva" className="h-11 w-11 rounded-full shadow" />
             <div>
               <h1 className="text-white text-xl font-semibold leading-none">Patria Nueva</h1>
-              <p className="text-sky-blue text-xs">Santiago de Anaya, Hidalgo</p>
+              <p className="text-white text-sm">Santiago de Anaya, Hidalgo</p>
             </div>
           </div>
 

@@ -16,6 +16,21 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
   const touchStartX = useRef<number | null>(null);
   const modalTouchStartX = useRef<number | null>(null);
 
+  const [controlsVisible, setControlsVisible] = useState(true);
+  const controlsTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const showControls = () => {
+    setControlsVisible(true);
+    if (controlsTimeout.current) clearTimeout(controlsTimeout.current);
+    controlsTimeout.current = setTimeout(() => setControlsVisible(false), 2000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (controlsTimeout.current) clearTimeout(controlsTimeout.current);
+    };
+  }, []);
+
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -49,22 +64,30 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
   };
 
   useEffect(() => {
-    // Si solo hay una imagen o está pendiente de pausa, no rotar
-    if (images.length <= 1 || paused) return;
+    if (modalOpen) {
+      showControls();
+    } else {
+      setControlsVisible(true);
+      if (controlsTimeout.current) {
+        clearTimeout(controlsTimeout.current);
+        controlsTimeout.current = null;
+      }
+    }
+  }, [modalOpen]);
 
+  useEffect(() => {
+    if (images.length <= 1 || paused) return;
     const id = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
-    }, 4000); // Rotate every 4 seconds
-    return () => clearInterval(id); // Clean up on component unmount
-  }, [images, paused]); // Re-run effect if images array or pause state changes
+    }, 4000);
+    return () => clearInterval(id);
+  }, [images, paused]);
 
-  // Cerrar modal si se hace scroll fuera de la sección del carrusel
   useEffect(() => {
     if (!modalOpen) return;
     const handleScroll = () => {
       if (!modalRef.current) return;
       const rect = modalRef.current.getBoundingClientRect();
-      // Si el modal está fuera de la pantalla (por scroll), ciérralo
       if (rect.bottom < 0 || rect.top > window.innerHeight) {
         setModalOpen(false);
         setPaused(false);
@@ -74,13 +97,12 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
     return () => window.removeEventListener('scroll', handleScroll);
   }, [modalOpen]);
 
-  // Don't render if no images are provided
   if (images.length === 0) return null;
 
   return (
     <>
       <div
-        className={`group relative flex items-center justify-center bg-transparent shadow-none ${className ?? ''}`.trim()}
+        className={`group relative flex items-center justify-center bg-transparent shadow-none ${className ?? ''}`}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -92,20 +114,31 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
             className={`absolute inset-0 w-full h-full ${imgClassName ?? 'object-cover'} transition-opacity duration-700 ${
               i === index ? 'opacity-100' : 'opacity-0'
             }`}
-            onClick={() => { setModalIndex(i); setPaused(true); setModalOpen(true); }}
+            onClick={() => {
+              setModalIndex(i);
+              setPaused(true);
+              setModalOpen(true);
+            }}
             style={{ cursor: 'pointer' }}
           />
         ))}
       </div>
+
       {modalOpen && (
         <div
           ref={modalRef}
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75"
+          className="fixed inset-0 flex items-center justify-center z-50 bg-white/10 backdrop-blur-lg"
+          onMouseMove={showControls}
+          onTouchStart={showControls}
         >
           <div
             className="relative inline-block"
-            onTouchStart={handleModalTouchStart}
+            onTouchStart={(e) => {
+              handleModalTouchStart(e);
+              showControls();
+            }}
             onTouchEnd={handleModalTouchEnd}
+            onMouseMove={showControls}
           >
             <img
               src={images[modalIndex]}
@@ -113,25 +146,40 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
               className="max-h-[80vh] max-w-[90vw] object-contain rounded-lg mx-auto my-auto shadow-lg"
             />
             <button
-              onClick={() => { setModalOpen(false); setPaused(false); }}
-              className="absolute top-2 right-2 z-10 bg-white/20 backdrop-blur-md rounded-full p-2 text-white hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/70"
+              onClick={() => {
+                setModalOpen(false);
+                setPaused(false);
+              }}
+              className={`absolute top-2 right-2 z-10 bg-white/20 backdrop-blur-md rounded-full p-2 text-white hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/70 transition-opacity ${
+                controlsVisible ? 'opacity-100' : 'opacity-0'
+              }`}
               style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
             >
               <X size={28} />
             </button>
-            {/* Botones de navegación ajustados cerca de la imagen */}
+
             {images.length > 1 && (
               <>
                 <button
-                  onClick={() => setModalIndex((modalIndex - 1 + images.length) % images.length)}
-                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md rounded-full p-2 sm:p-3 text-white z-10 hover:bg-white/30 focus:outline-none"
+                  onClick={() => {
+                    setModalIndex((modalIndex - 1 + images.length) % images.length);
+                    showControls();
+                  }}
+                  className={`absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md rounded-full p-2 sm:p-3 text-white z-10 hover:bg-white/30 focus:outline-none transition-opacity ${
+                    controlsVisible ? 'opacity-100' : 'opacity-0'
+                  }`}
                   style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
                 >
                   &#8592;
                 </button>
                 <button
-                  onClick={() => setModalIndex((modalIndex + 1) % images.length)}
-                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md rounded-full p-2 sm:p-3 text-white z-10 hover:bg-white/30 focus:outline-none"
+                  onClick={() => {
+                    setModalIndex((modalIndex + 1) % images.length);
+                    showControls();
+                  }}
+                  className={`absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md rounded-full p-2 sm:p-3 text-white z-10 hover:bg-white/30 focus:outline-none transition-opacity ${
+                    controlsVisible ? 'opacity-100' : 'opacity-0'
+                  }`}
                   style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
                 >
                   &#8594;
@@ -146,3 +194,4 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
 };
 
 export default ImageCarousel;
+

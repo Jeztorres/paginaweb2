@@ -84,19 +84,10 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
     return () => clearInterval(id);
   }, [images, paused]);
 
-  useEffect(() => {
-    if (!modalOpen) return;
-    const handleScroll = () => {
-      if (!modalRef.current) return;
-      const rect = modalRef.current.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > window.innerHeight) {
-        setModalOpen(false);
-        setPaused(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [modalOpen]);
+  // Keep the modal visible while the user scrolls by removing
+  // the previous scroll listener that closed the modal when it
+  // moved out of view. The modal uses fixed positioning, so it
+  // naturally stays on screen and "follows" the user.
 
   if (images.length === 0) return null;
 

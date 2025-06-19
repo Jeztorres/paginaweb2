@@ -150,10 +150,10 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
                 setModalOpen(false);
                 setPaused(false);
               }}
-              className={`absolute top-2 right-2 z-10 bg-white/20 backdrop-blur-md rounded-full p-2 text-white hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/70 transition-opacity ${
+              className={`absolute top-2 right-2 z-10 bg-transparent backdrop-blur-md border border-white/40 rounded-full p-2 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/70 transition-opacity ${
                 controlsVisible ? 'opacity-100' : 'opacity-0'
               }`}
-              style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
+              style={{ cursor: 'pointer' }}
             >
               <X size={28} />
             </button>
@@ -165,10 +165,10 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
                     setModalIndex((modalIndex - 1 + images.length) % images.length);
                     showControls();
                   }}
-                  className={`absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md rounded-full p-2 sm:p-3 text-white z-10 hover:bg-white/30 focus:outline-none transition-opacity ${
+                  className={`absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-transparent backdrop-blur-md border border-white/40 rounded-full p-2 sm:p-3 text-white z-10 hover:bg-white/20 focus:outline-none transition-opacity ${
                     controlsVisible ? 'opacity-100' : 'opacity-0'
                   }`}
-                  style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
+                  style={{ cursor: 'pointer' }}
                 >
                   &#8592;
                 </button>
@@ -177,10 +177,10 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
                     setModalIndex((modalIndex + 1) % images.length);
                     showControls();
                   }}
-                  className={`absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md rounded-full p-2 sm:p-3 text-white z-10 hover:bg-white/30 focus:outline-none transition-opacity ${
+                  className={`absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-transparent backdrop-blur-md border border-white/40 rounded-full p-2 sm:p-3 text-white z-10 hover:bg-white/20 focus:outline-none transition-opacity ${
                     controlsVisible ? 'opacity-100' : 'opacity-0'
                   }`}
-                  style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
+                  style={{ cursor: 'pointer' }}
                 >
                   &#8594;
                 </button>
@@ -194,4 +194,3 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
 };
 
 export default ImageCarousel;
-

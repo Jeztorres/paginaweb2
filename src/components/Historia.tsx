@@ -23,11 +23,19 @@ const Historia = () => {
   const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
   const [modalOffset, setModalOffset] = useState(0);
 
-  // Cerrar el modal si el usuario hace scroll
+  // Cerrar el modal solo cuando el usuario se desplaza hacia abajo
   useEffect(() => {
     if (!modalAbierto) return;
-    const handleScroll = () => setModalAbierto(false);
-    window.addEventListener('scroll', handleScroll, { once: true });
+    let prevY = window.scrollY;
+    const handleScroll = () => {
+      const currY = window.scrollY;
+      if (currY > prevY) {
+        setModalAbierto(false);
+        window.removeEventListener('scroll', handleScroll);
+      }
+      prevY = currY;
+    };
+    window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [modalAbierto]);
   return (

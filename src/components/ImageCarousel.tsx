@@ -84,14 +84,20 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
     return () => clearInterval(id);
   }, [images, paused]);
 
-  // Close the modal if the user scrolls the page
+  // Cerrar el modal solo cuando el usuario se desplaza hacia abajo
   useEffect(() => {
     if (!modalOpen) return;
+    let prevY = window.scrollY;
     const handleScroll = () => {
-      setModalOpen(false);
-      setPaused(false);
+      const currY = window.scrollY;
+      if (currY > prevY) {
+        setModalOpen(false);
+        setPaused(false);
+        window.removeEventListener('scroll', handleScroll);
+      }
+      prevY = currY;
     };
-    window.addEventListener('scroll', handleScroll, { once: true });
+    window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [modalOpen]);
 

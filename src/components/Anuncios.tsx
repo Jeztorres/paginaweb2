@@ -75,11 +75,19 @@ const cerrarModal = () => {
   setAnuncioSeleccionado(null);
 };
 
-  // Cerrar el modal al hacer scroll
+  // Cerrar el modal solo cuando el usuario se desplaza hacia abajo
   useEffect(() => {
     if (!modalAbierto) return;
-    const handleScroll = () => cerrarModal();
-    window.addEventListener('scroll', handleScroll, { once: true });
+    let prevY = window.scrollY;
+    const handleScroll = () => {
+      const currY = window.scrollY;
+      if (currY > prevY) {
+        cerrarModal();
+        window.removeEventListener('scroll', handleScroll);
+      }
+      prevY = currY;
+    };
+    window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [modalAbierto]);
 

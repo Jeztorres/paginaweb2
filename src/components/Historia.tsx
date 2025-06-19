@@ -120,7 +120,7 @@ const Historia = () => {
                 imgClassName="w-full h-full object-contain rounded-2xl"
               />
               <p className="text-center text-gray-600 text-sm mt-2">
-                Haz clic en cualquier imagen para verla en grande y navegar entre las fotos.
+                Para visualizar las imágenes con mayor detalle, pueden hacer clic sobre cualquiera de ellas.
               </p>
             </div>
 

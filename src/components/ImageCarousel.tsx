@@ -13,6 +13,66 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
   const [modalOpen, setModalOpen] = useState(false);
   const [modalIndex, setModalIndex] = useState<number>(0);
   const modalRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
+  const modalTouchStartX = useRef<number | null>(null);
+  const [controlsVisible, setControlsVisible] = useState(true);
+  const controlsTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const showControls = () => {
+    setControlsVisible(true);
+    if (controlsTimeout.current) clearTimeout(controlsTimeout.current);
+    controlsTimeout.current = setTimeout(() => setControlsVisible(false), 2000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (controlsTimeout.current) clearTimeout(controlsTimeout.current);
+    };
+  }, []);
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const threshold = 50;
+    if (deltaX > threshold) {
+      setIndex((prev) => (prev - 1 + images.length) % images.length);
+    } else if (deltaX < -threshold) {
+      setIndex((prev) => (prev + 1) % images.length);
+    }
+    touchStartX.current = null;
+  };
+
+  const handleModalTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    modalTouchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleModalTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (modalTouchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - modalTouchStartX.current;
+    const threshold = 50;
+    if (deltaX > threshold) {
+      setModalIndex((prev) => (prev - 1 + images.length) % images.length);
+    } else if (deltaX < -threshold) {
+      setModalIndex((prev) => (prev + 1) % images.length);
+    }
+    modalTouchStartX.current = null;
+  };
+
+  useEffect(() => {
+    if (modalOpen) {
+      showControls();
+    } else {
+      setControlsVisible(true);
+      if (controlsTimeout.current) {
+        clearTimeout(controlsTimeout.current);
+        controlsTimeout.current = null;
+      }
+    }
+  }, [modalOpen]);
 
   useEffect(() => {
     // Si solo hay una imagen o está pendiente de pausa, no rotar
@@ -47,6 +107,8 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
     <>
       <div
         className={`group relative flex items-center justify-center bg-transparent shadow-none ${className ?? ''}`.trim()}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         {images.map((src, i) => (
           <img
@@ -64,9 +126,16 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
       {modalOpen && (
         <div
           ref={modalRef}
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75"
+          className="fixed inset-0 flex items-center justify-center z-50 bg-white/10 backdrop-blur-lg"
+          onMouseMove={showControls}
+          onTouchStart={showControls}
         >
-          <div className="relative inline-block">
+          <div
+            className="relative inline-block"
+            onTouchStart={(e) => { handleModalTouchStart(e); showControls(); }}
+            onTouchEnd={handleModalTouchEnd}
+            onMouseMove={showControls}
+          >
             <img
               src={images[modalIndex]}
               alt={`Imagen ampliada ${modalIndex + 1}`}
@@ -74,7 +143,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
             />
             <button
               onClick={() => { setModalOpen(false); setPaused(false); }}
-              className="absolute top-2 right-2 z-10 bg-black/50 rounded-full p-2 text-white hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-white"
+              className={`absolute top-2 right-2 z-10 bg-transparent backdrop-blur-md border border-white/40 rounded-full p-2 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/70 transition-opacity ${controlsVisible ? 'opacity-100' : 'opacity-0'}`}
               style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
             >
               <X size={28} />
@@ -83,15 +152,15 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
             {images.length > 1 && (
               <>
                 <button
-                  onClick={() => setModalIndex((modalIndex - 1 + images.length) % images.length)}
-                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/40 rounded-full p-2 sm:p-3 text-white z-10 hover:bg-black/60 focus:outline-none"
+                  onClick={() => { setModalIndex((modalIndex - 1 + images.length) % images.length); showControls(); }}
+                  className={`absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-transparent backdrop-blur-md border border-white/40 rounded-full p-2 sm:p-3 text-white z-10 hover:bg-white/20 focus:outline-none transition-opacity ${controlsVisible ? 'opacity-100' : 'opacity-0'}`}
                   style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
                 >
                   &#8592;
                 </button>
                 <button
-                  onClick={() => setModalIndex((modalIndex + 1) % images.length)}
-                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/40 rounded-full p-2 sm:p-3 text-white z-10 hover:bg-black/60 focus:outline-none"
+                  onClick={() => { setModalIndex((modalIndex + 1) % images.length); showControls(); }}
+                  className={`absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-transparent backdrop-blur-md border border-white/40 rounded-full p-2 sm:p-3 text-white z-10 hover:bg-white/20 focus:outline-none transition-opacity ${controlsVisible ? 'opacity-100' : 'opacity-0'}`}
                   style={{ border: 'none', outline: 'none', cursor: 'pointer' }}
                 >
                   &#8594;

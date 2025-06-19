@@ -29,7 +29,7 @@ const Historia = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
           <div className="space-y-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg border-l-4 border-terracota">
               <div className="flex items-center mb-4">

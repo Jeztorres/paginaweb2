@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Información de la comunidad */}
-          <div className="space-y-4">
+          <div className="space-y-4 text-center md:text-left">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-terracota rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-lg">PN</span>
@@ -25,7 +25,7 @@ const Footer = () => {
           </div>
 
           {/* Enlaces rápidos */}
-          <div>
+          <div className="text-center md:text-left">
             <h4 className="text-lg font-semibold mb-4 text-terracota">Enlaces Rápidos</h4>
             <ul className="space-y-2 text-sm">
               <li>
@@ -57,7 +57,7 @@ const Footer = () => {
           </div>
 
           {/* Contacto */}
-          <div>
+          <div className="text-center md:text-left">
             <h4 className="text-lg font-semibold mb-4 text-terracota">Contacto</h4>
             <div className="space-y-3 text-sm">
               <div className="flex items-center space-x-2">
@@ -76,7 +76,7 @@ const Footer = () => {
           </div>
 
           {/* Próximos eventos */}
-          <div>
+          <div className="text-center md:text-left">
             <h4 className="text-lg font-semibold mb-4 text-terracota">Próximos Eventos</h4>
             <div className="space-y-3 text-sm">
               <div className="flex items-start space-x-2">
@@ -101,7 +101,7 @@ const Footer = () => {
         <div className="border-t border-sky-blue my-8"></div>
 
         {/* Bottom footer */}
-        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-center md:text-left">
           <div className="flex items-center space-x-2 text-sm text-cream">
             <span>Hecho con</span>
             <Heart size={16} className="text-terracota" />

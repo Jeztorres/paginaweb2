@@ -12,6 +12,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
   const [paused, setPaused] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalIndex, setModalIndex] = useState<number>(0);
+  const [modalOffset, setModalOffset] = useState(0);
   const modalRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const modalTouchStartX = useRef<number | null>(null);
@@ -114,8 +115,10 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
             className={`absolute inset-0 w-full h-full ${imgClassName ?? 'object-cover'} transition-opacity duration-700 ${
               i === index ? 'opacity-100' : 'opacity-0'
             }`}
-            onClick={() => {
+            onClick={(e) => {
+              const rect = (e.target as HTMLImageElement).getBoundingClientRect();
               setModalIndex(i);
+              setModalOffset(rect.top);
               setPaused(true);
               setModalOpen(true);
             }}
@@ -127,7 +130,8 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
       {modalOpen && (
         <div
           ref={modalRef}
-          className="fixed inset-0 flex items-center justify-center z-50 bg-white/10 backdrop-blur-lg"
+          className="fixed inset-0 flex items-start justify-center z-50 bg-white/10 backdrop-blur-lg"
+          style={{ paddingTop: modalOffset }}
           onMouseMove={showControls}
           onTouchStart={showControls}
         >

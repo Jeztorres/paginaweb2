@@ -1,5 +1,5 @@
-import React from 'react';
-import { Clock, MapPin, Users, Book } from 'lucide-react';
+import React, { useState } from 'react';
+import { Clock, MapPin, Users, Book, X } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 import ImageCarousel from './ImageCarousel';
 
@@ -19,6 +19,9 @@ const historiaCarouselImages = Object.values(
 
 const Historia = () => {
   const ref = useScrollAnimation<HTMLDivElement>();
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
+  const [modalOffset, setModalOffset] = useState(0);
   return (
     <div ref={ref} className="scroll-animation py-20 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -130,10 +133,36 @@ const Historia = () => {
                   key={idx}
                   src={src}
                   alt={`Historia ${idx + 1}`}
-                  className="w-full h-48 object-cover rounded-2xl shadow-md"
+                  className="w-full h-48 object-cover rounded-2xl shadow-md cursor-pointer"
+                  onClick={(e) => {
+                    setImagenSeleccionada(src);
+                    setModalOffset((e.currentTarget as HTMLImageElement).getBoundingClientRect().top);
+                    setModalAbierto(true);
+                  }}
                 />
               ))}
             </div>
+
+            {modalAbierto && imagenSeleccionada && (
+              <div
+                className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center p-4 z-50"
+                style={{ paddingTop: modalOffset }}
+              >
+                <div className="relative">
+                  <button
+                    onClick={() => setModalAbierto(false)}
+                    className="absolute top-2 right-2 bg-black/40 text-white p-2 rounded-full hover:bg-black/70"
+                  >
+                    <X size={20} />
+                  </button>
+                  <img
+                    src={imagenSeleccionada}
+                    alt="Imagen seleccionada"
+                    className="max-h-[80vh] max-w-[90vw] object-contain rounded-lg"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

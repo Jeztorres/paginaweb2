@@ -8,7 +8,12 @@ interface ImageCarouselProps {
   nextSectionId?: string;
 }
 
-const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgClassName, nextSectionId }) => {
+const ImageCarousel: React.FC<ImageCarouselProps> = ({
+  images,
+  className,
+  imgClassName,
+  nextSectionId,
+}) => {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -17,7 +22,6 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
   const modalRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const modalTouchStartX = useRef<number | null>(null);
-
   const [controlsVisible, setControlsVisible] = useState(true);
   const controlsTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -92,6 +96,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
     if (!nextEl) return;
     const nextTop = nextEl.offsetTop;
     let prevY = window.scrollY;
+
     const handleScroll = () => {
       const currY = window.scrollY;
       if (currY > prevY && currY + window.innerHeight >= nextTop) {
@@ -101,6 +106,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
       }
       prevY = currY;
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [modalOpen, nextSectionId]);

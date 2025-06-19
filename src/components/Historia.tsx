@@ -11,10 +11,10 @@ const historiaImages = Object.values(
 ) as string[];
 
 const historiaCarouselImages = Object.values(
-  import.meta.glob(
-    '../assets/historia-carousel/*.{jpg,jpeg,png,webp}',
-    { eager: true, as: 'url' }
-  )
+  import.meta.glob('../assets/historia-carousel/*.{jpg,jpeg,png,webp}', {
+    eager: true,
+    as: 'url'
+  })
 ) as string[];
 
 const Historia = () => {
@@ -30,6 +30,7 @@ const Historia = () => {
     if (!nextEl) return;
     const nextTop = nextEl.offsetTop;
     let prevY = window.scrollY;
+
     const handleScroll = () => {
       const currY = window.scrollY;
       if (currY > prevY && currY + window.innerHeight >= nextTop) {
@@ -38,9 +39,11 @@ const Historia = () => {
       }
       prevY = currY;
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [modalAbierto]);
+
   return (
     <div ref={ref} className="scroll-animation py-20 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,7 +103,6 @@ const Historia = () => {
           <div className="space-y-6">
             <div className="bg-gradient-to-br from-olive-green to-sky-blue rounded-2xl p-8 text-white">
               <h3 className="text-3xl font-bold mb-6">Datos Históricos</h3>
-              
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
                   <div className="bg-white bg-opacity-20 p-2 rounded-full">
@@ -111,7 +113,6 @@ const Historia = () => {
                     <p className="text-cream text-sm">Desde la exhacienda Ocotza</p>
                   </div>
                 </div>
-                
                 <div className="flex items-center space-x-4">
                   <div className="bg-white bg-opacity-20 p-2 rounded-full">
                     <MapPin size={20} />
@@ -121,7 +122,6 @@ const Historia = () => {
                     <p className="text-cream text-sm">Barrio del Capulín / Ejido del Capulín</p>
                   </div>
                 </div>
-                
                 <div className="flex items-center space-x-4">
                   <div className="bg-white bg-opacity-20 p-2 rounded-full">
                     <Users size={20} />
@@ -191,3 +191,4 @@ const Historia = () => {
 };
 
 export default Historia;
+

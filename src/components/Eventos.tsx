@@ -19,11 +19,13 @@ const Eventos = () => {
   const [eventoSeleccionado, setEventoSeleccionado] = useState<Evento | null>(null);
   const [modalOffset, setModalOffset] = useState(0);
 
+  // Cargar imágenes
   const eventImagesMap: Record<number, string[]> = {};
   const imgs = import.meta.glob('../assets/eventos-carousel/evento*/*.{jpg,jpeg,png,webp}', {
     eager: true,
-    as: 'url'
+    as: 'url',
   });
+
   for (const path in imgs) {
     const match = path.match(/eventos-carousel\/evento(\d+)\//);
     if (match) {
@@ -31,6 +33,7 @@ const Eventos = () => {
       (eventImagesMap[id] ??= []).push(imgs[path] as string);
     }
   }
+
   const eventos: Evento[] = [
     {
       id: 1,
@@ -110,18 +113,19 @@ const Eventos = () => {
     setModalAbierto(true);
   };
 
-const cerrarModal = () => {
-  setModalAbierto(false);
-  setEventoSeleccionado(null);
-};
+  const cerrarModal = () => {
+    setModalAbierto(false);
+    setEventoSeleccionado(null);
+  };
 
-  // Cerrar el modal al llegar a la siguiente sección desplazándose hacia abajo
+  // Cerrar el modal al hacer scroll hacia la siguiente sección
   useEffect(() => {
     if (!modalAbierto) return;
     const nextEl = document.querySelector<HTMLElement>('#servicios');
     if (!nextEl) return;
     const nextTop = nextEl.offsetTop;
     let prevY = window.scrollY;
+
     const handleScroll = () => {
       const currY = window.scrollY;
       if (currY > prevY && currY + window.innerHeight >= nextTop) {
@@ -130,6 +134,7 @@ const cerrarModal = () => {
       }
       prevY = currY;
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [modalAbierto]);
@@ -169,18 +174,14 @@ const cerrarModal = () => {
                   {evento.fecha}
                 </div>
               </div>
-              
+
               <div className="p-6">
                 <h3 className="text-xl font-bold text-olive-green mb-3">
                   {evento.nombre}
                 </h3>
-                
                 <p className="text-gray-600 mb-4 leading-relaxed">
                   {evento.descripcion}
                 </p>
-                
-                {/* Se omite ubicación y horario según solicitud */}
-                
                 <div className="mt-4 pt-4 border-t border-gray-200">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Tradición Comunitaria</span>
@@ -191,6 +192,7 @@ const cerrarModal = () => {
             </div>
           ))}
         </div>
+
         {modalAbierto && eventoSeleccionado && (
           <div
             className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center p-4 z-50"

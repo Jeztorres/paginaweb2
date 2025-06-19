@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Clock, MapPin, Users, Book, X } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 import ImageCarousel from './ImageCarousel';
@@ -22,6 +22,14 @@ const Historia = () => {
   const [modalAbierto, setModalAbierto] = useState(false);
   const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
   const [modalOffset, setModalOffset] = useState(0);
+
+  // Cerrar el modal si el usuario hace scroll
+  useEffect(() => {
+    if (!modalAbierto) return;
+    const handleScroll = () => setModalAbierto(false);
+    window.addEventListener('scroll', handleScroll, { once: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [modalAbierto]);
   return (
     <div ref={ref} className="scroll-animation py-20 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

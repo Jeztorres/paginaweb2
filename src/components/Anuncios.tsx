@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Bell,
   Calendar,
@@ -70,10 +70,18 @@ const Anuncios: React.FC = () => {
     setModalAbierto(true);
   };
 
-  const cerrarModal = () => {
-    setModalAbierto(false);
-    setAnuncioSeleccionado(null);
-  };
+const cerrarModal = () => {
+  setModalAbierto(false);
+  setAnuncioSeleccionado(null);
+};
+
+  // Cerrar el modal al hacer scroll
+  useEffect(() => {
+    if (!modalAbierto) return;
+    const handleScroll = () => cerrarModal();
+    window.addEventListener('scroll', handleScroll, { once: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [modalAbierto]);
 
   // Suscripción
   const manejarSuscripcion = async (e: React.FormEvent<HTMLFormElement>) => {

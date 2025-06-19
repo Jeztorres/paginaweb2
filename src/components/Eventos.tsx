@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Music, X } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 
@@ -110,10 +110,18 @@ const Eventos = () => {
     setModalAbierto(true);
   };
 
-  const cerrarModal = () => {
-    setModalAbierto(false);
-    setEventoSeleccionado(null);
-  };
+const cerrarModal = () => {
+  setModalAbierto(false);
+  setEventoSeleccionado(null);
+};
+
+  // Cerrar el modal cuando el usuario hace scroll
+  useEffect(() => {
+    if (!modalAbierto) return;
+    const handleScroll = () => cerrarModal();
+    window.addEventListener('scroll', handleScroll, { once: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [modalAbierto]);
 
   return (
     <div ref={ref} className="scroll-animation py-20 bg-olive-green">

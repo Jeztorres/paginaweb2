@@ -5,9 +5,10 @@ interface ImageCarouselProps {
   images: string[];
   className?: string;
   imgClassName?: string;
+  nextSectionId?: string;
 }
 
-const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgClassName }) => {
+const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgClassName, nextSectionId }) => {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -84,10 +85,25 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, className, imgCla
     return () => clearInterval(id);
   }, [images, paused]);
 
-  // Keep the modal visible while the user scrolls by removing
-  // the previous scroll listener that closed the modal when it
-  // moved out of view. The modal uses fixed positioning, so it
-  // naturally stays on screen and "follows" the user.
+  // Cerrar el modal al llegar a la siguiente sección desplazándose hacia abajo
+  useEffect(() => {
+    if (!modalOpen || !nextSectionId) return;
+    const nextEl = document.querySelector<HTMLElement>(nextSectionId);
+    if (!nextEl) return;
+    const nextTop = nextEl.offsetTop;
+    let prevY = window.scrollY;
+    const handleScroll = () => {
+      const currY = window.scrollY;
+      if (currY > prevY && currY + window.innerHeight >= nextTop) {
+        setModalOpen(false);
+        setPaused(false);
+        window.removeEventListener('scroll', handleScroll);
+      }
+      prevY = currY;
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [modalOpen, nextSectionId]);
 
   if (images.length === 0) return null;
 

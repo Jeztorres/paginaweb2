@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Clock, MapPin, Users, Book, X } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 import ImageCarousel from './ImageCarousel';
@@ -22,6 +22,25 @@ const Historia = () => {
   const [modalAbierto, setModalAbierto] = useState(false);
   const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
   const [modalOffset, setModalOffset] = useState(0);
+
+  // Cerrar el modal al llegar a la siguiente sección desplazándose hacia abajo
+  useEffect(() => {
+    if (!modalAbierto) return;
+    const nextEl = document.querySelector<HTMLElement>('#anuncios');
+    if (!nextEl) return;
+    const nextTop = nextEl.offsetTop;
+    let prevY = window.scrollY;
+    const handleScroll = () => {
+      const currY = window.scrollY;
+      if (currY > prevY && currY + window.innerHeight >= nextTop) {
+        setModalAbierto(false);
+        window.removeEventListener('scroll', handleScroll);
+      }
+      prevY = currY;
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [modalAbierto]);
   return (
     <div ref={ref} className="scroll-animation py-20 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -121,6 +140,7 @@ const Historia = () => {
                 images={historiaCarouselImages}
                 className="w-full h-64 md:h-80 rounded-2xl overflow-hidden shadow-lg"
                 imgClassName="w-full h-full object-contain rounded-2xl"
+                nextSectionId="#anuncios"
               />
               <p className="text-center text-gray-600 text-sm mt-2">
                 Para visualizar las imágenes con mayor detalle, pueden hacer clic sobre cualquiera de ellas.

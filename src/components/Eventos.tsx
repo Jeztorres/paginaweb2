@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Music, X } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 
@@ -110,10 +110,29 @@ const Eventos = () => {
     setModalAbierto(true);
   };
 
-  const cerrarModal = () => {
-    setModalAbierto(false);
-    setEventoSeleccionado(null);
-  };
+const cerrarModal = () => {
+  setModalAbierto(false);
+  setEventoSeleccionado(null);
+};
+
+  // Cerrar el modal al llegar a la siguiente sección desplazándose hacia abajo
+  useEffect(() => {
+    if (!modalAbierto) return;
+    const nextEl = document.querySelector<HTMLElement>('#servicios');
+    if (!nextEl) return;
+    const nextTop = nextEl.offsetTop;
+    let prevY = window.scrollY;
+    const handleScroll = () => {
+      const currY = window.scrollY;
+      if (currY > prevY && currY + window.innerHeight >= nextTop) {
+        cerrarModal();
+        window.removeEventListener('scroll', handleScroll);
+      }
+      prevY = currY;
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [modalAbierto]);
 
   return (
     <div ref={ref} className="scroll-animation py-20 bg-olive-green">

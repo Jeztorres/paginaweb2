@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Bell,
   Calendar,
@@ -70,10 +70,29 @@ const Anuncios: React.FC = () => {
     setModalAbierto(true);
   };
 
-  const cerrarModal = () => {
-    setModalAbierto(false);
-    setAnuncioSeleccionado(null);
-  };
+const cerrarModal = () => {
+  setModalAbierto(false);
+  setAnuncioSeleccionado(null);
+};
+
+  // Cerrar el modal al llegar a la siguiente sección desplazándose hacia abajo
+  useEffect(() => {
+    if (!modalAbierto) return;
+    const nextEl = document.querySelector<HTMLElement>('#eventos');
+    if (!nextEl) return;
+    const nextTop = nextEl.offsetTop;
+    let prevY = window.scrollY;
+    const handleScroll = () => {
+      const currY = window.scrollY;
+      if (currY > prevY && currY + window.innerHeight >= nextTop) {
+        cerrarModal();
+        window.removeEventListener('scroll', handleScroll);
+      }
+      prevY = currY;
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [modalAbierto]);
 
   // Suscripción
   const manejarSuscripcion = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -240,6 +259,7 @@ const Anuncios: React.FC = () => {
                 images={anuncioSeleccionado.imagenes ?? [anuncioSeleccionado.imagen]}
                 className="w-full h-[400px]" // Altura fija para el carrusel
                 imgClassName="object-contain"
+                nextSectionId="#eventos"
               />
 
               {/* Contenido del anuncio dentro del modal con fondo verde transparente y TEXTO CLARO */}

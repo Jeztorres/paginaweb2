@@ -17,6 +17,7 @@ const Eventos = () => {
   const ref = useScrollAnimation<HTMLDivElement>();
   const [modalAbierto, setModalAbierto] = useState(false);
   const [eventoSeleccionado, setEventoSeleccionado] = useState<Evento | null>(null);
+  const [modalOffset, setModalOffset] = useState(0);
 
   const eventImagesMap: Record<number, string[]> = {};
   const imgs = import.meta.glob('../assets/eventos-carousel/evento*/*.{jpg,jpeg,png,webp}', {
@@ -103,8 +104,9 @@ const Eventos = () => {
     }
   ];
 
-  const abrirModal = (evento: Evento) => {
+  const abrirModal = (evento: Evento, offset: number) => {
     setEventoSeleccionado(evento);
+    setModalOffset(offset);
     setModalAbierto(true);
   };
 
@@ -130,7 +132,12 @@ const Eventos = () => {
           {eventos.map((evento) => (
             <div
               key={evento.id}
-              onClick={() => abrirModal(evento)}
+              onClick={(e) =>
+                abrirModal(
+                  evento,
+                  (e.currentTarget as HTMLElement).getBoundingClientRect().top
+                )
+              }
               className="cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               <div className="relative h-48">
@@ -166,7 +173,10 @@ const Eventos = () => {
           ))}
         </div>
         {modalAbierto && eventoSeleccionado && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center p-4 z-50"
+            style={{ paddingTop: modalOffset }}
+          >
             <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-2xl max-w-2xl w-full">
               <div className="relative">
                 <button

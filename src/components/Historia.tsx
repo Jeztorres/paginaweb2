@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Clock, MapPin, Users, Book } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 import ImageCarousel from './ImageCarousel';
@@ -13,6 +13,13 @@ const historiaCarouselImages = Object.values(
 const Historia = () => {
   const ref = useScrollAnimation<HTMLDivElement>();
   const [zoomIndex, setZoomIndex] = useState<number | null>(null);
+  // Ref para el contenedor del modal y scroll al abrir
+  const modalRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (zoomIndex !== null && modalRef.current) {
+      modalRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [zoomIndex]);
 
   return (
     <div ref={ref} className="scroll-animation py-20 bg-cream">
@@ -131,7 +138,7 @@ const Historia = () => {
             {/* Modal de zoom simple */}
             {zoomIndex !== null && (
               <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
-                <div className="relative bg-white rounded-lg overflow-hidden">
+                <div ref={modalRef} className="relative bg-white rounded-lg overflow-hidden">
                   <img
                     src={historiaCarouselImages[zoomIndex]}
                     alt={`Historia zoom ${zoomIndex + 1}`}

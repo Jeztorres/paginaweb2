@@ -1,0 +1,9 @@
+# Archivos que puedes eliminar tras migrar a Google Forms:
+
+- server.js
+- .env
+- .env.example
+
+Ya no necesitas backend ni configuración de correo para el formulario de contacto. El resto de archivos (configuración de Vite, Tailwind, componentes, etc.) siguen siendo útiles para tu frontend.
+
+¿Quieres que elimine estos archivos automáticamente?

@@ -1,0 +1,7 @@
+Estos archivos ya no son necesarios para el formulario de contacto con Google Forms:
+
+- server.js
+- .env
+- .env.example
+
+¿Deseas que los elimine ahora? Si quieres conservar una copia de seguridad, descárgalos antes de continuar.

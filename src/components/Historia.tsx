@@ -134,6 +134,9 @@ const Historia = () => {
                   />
                 ))}
               </div>
+              <p className="text-center text-sm text-gray-600 mt-2">
+                Presione cualquier imagen abajo para verla más de cerca.
+              </p>
             </div>
             {/* Modal de zoom simple */}
             {zoomIndex !== null && (

@@ -10,9 +10,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Información de la comunidad */}
           <div className="space-y-4 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start space-x-3">
-              <div className="w-10 h-10">
-                <img src={logo} alt="Logo Patria Nueva" className="w-full h-full object-contain" />
+            <div className="flex flex-col items-center md:flex-row md:justify-start md:space-x-3 space-y-2 md:space-y-0">
+              <div className="w-12 h-12 rounded-full overflow-hidden">
+                <img src={logo} alt="Logo Patria Nueva" className="w-full h-full object-cover" />
               </div>
               <div>
                 <h3 className="text-xl font-bold">Patria Nueva</h3>

@@ -15,11 +15,15 @@ const Hero = () => {
   return (
     <div
       ref={ref}
-      className="scroll-animation bg-gradient-to-br from-olive-green to-sky-blue min-h-screen flex items-center"
+      className="scroll-animation relative min-h-screen flex items-center"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-        <div className="flex flex-col md:flex-row items-center md:space-x-12">
-          <div className="text-center md:text-left md:w-1/2">
+      <HeroCarousel
+        className="absolute inset-0 h-full"
+        imgClassName="object-cover w-full h-full"
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-olive-green to-sky-blue opacity-70"></div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full relative z-10">
+        <div className="text-center md:text-left max-w-2xl mx-auto">
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6">
             Bienvenidos a
             <br />
@@ -73,10 +77,6 @@ const Hero = () => {
               <p className="text-cream">Avanzamos hacia un futuro próspero</p>
             </div>
           </div>
-          </div>
-
-          <div className="w-full md:w-1/2 mt-10 md:mt-0">
-            <HeroCarousel />
           </div>
         </div>
       </div>

@@ -92,8 +92,11 @@ const Header: React.FC = () => {
                     ${menuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3">
-          {/* Logo */}
-          <div className="flex items-center space-x-3 select-none">
+          {/* Logo (clickable en móvil para volver al inicio) */}
+          <div
+            onClick={() => goTo('#inicio')}
+            className="flex items-center space-x-3 select-none cursor-pointer"
+          >
             <img src={logo} alt="Logo Patria Nueva" className="h-11 w-11 rounded-full shadow" />
             <div>
               <h1 className="text-white text-xl font-semibold leading-none">Patria Nueva</h1>

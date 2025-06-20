@@ -1,4 +1,3 @@
-import React from 'react';
 import { ArrowRight, Calendar, BookOpen } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 import HeroCarousel from './HeroCarousel';
@@ -24,7 +23,14 @@ const Hero = () => {
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6">
             Bienvenidos a
             <br />
-            <span className="text-terracota">Patria Nueva</span>
+            <span
+              className="text-terracota"
+              style={{
+                textShadow: '1px 1px 0 #fff, -1px 1px 0 #fff, 1px -1px 0 #fff, -1px -1px 0 #fff',
+              }}
+            >
+              Patria Nueva
+            </span>
           </h1>
           
           <p className="text-base sm:text-xl md:text-2xl text-cream font-light mb-8 max-w-4xl mx-auto leading-relaxed">

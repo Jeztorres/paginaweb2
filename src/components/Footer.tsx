@@ -26,7 +26,12 @@ const Footer = () => {
 
           {/* Enlaces rápidos */}
           <div className="text-center md:text-left">
-            <h4 className="text-lg font-semibold mb-4 text-terracota">Enlaces Rápidos</h4>
+            <h4
+              className="text-lg font-semibold mb-4 text-terracota"
+              style={{ textShadow: '1px 1px 0 #fff, -1px 1px 0 #fff, 1px -1px 0 #fff, -1px -1px 0 #fff' }}
+            >
+              Enlaces Rápidos
+            </h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <a href="#inicio" className="text-cream hover:text-white transition-colors">
@@ -58,26 +63,27 @@ const Footer = () => {
 
           {/* Contacto */}
           <div className="text-center md:text-left">
-            <h4 className="text-lg font-semibold mb-4 text-terracota">Contacto</h4>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center space-x-2">
-                <MapPin size={16} className="text-sky-blue" />
-                <span className="text-cream">Santiago de Anaya, Hidalgo</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone size={16} className="text-sky-blue" />
-                <span className="text-cream">+52 771 234 5677</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Mail size={16} className="text-sky-blue" />
-                <span className="text-cream">l21200651@pachuca.tecnm.mx</span>
-              </div>
+            <h4
+              className="text-lg font-semibold mb-4 text-terracota"
+              style={{ textShadow: '1px 1px 0 #fff, -1px 1px 0 #fff, 1px -1px 0 #fff, -1px -1px 0 #fff' }}
+            >
+              Contacto
+            </h4>
+            <div className="flex justify-center md:justify-start space-x-4 text-sky-blue">
+              <MapPin size={20} />
+              <Phone size={20} />
+              <Mail size={20} />
             </div>
           </div>
 
           {/* Próximos eventos */}
           <div className="text-center md:text-left">
-            <h4 className="text-lg font-semibold mb-4 text-terracota">Próximos Eventos</h4>
+            <h4
+              className="text-lg font-semibold mb-4 text-terracota"
+              style={{ textShadow: '1px 1px 0 #fff, -1px 1px 0 #fff, 1px -1px 0 #fff, -1px -1px 0 #fff' }}
+            >
+              Próximos Eventos
+            </h4>
             <div className="space-y-3 text-sm">
               <div className="flex items-start space-x-2">
                 <Calendar size={16} className="text-sky-blue mt-1" />

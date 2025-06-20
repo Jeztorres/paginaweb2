@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Bell,
   Calendar,
@@ -27,6 +27,14 @@ const Anuncios: React.FC = () => {
   const [emailSuscripcion, setEmailSuscripcion] = useState('');
   const [suscripcionExitosa, setSuscripcionExitosa] = useState(false);
   const [mostrarSuscripcion, setMostrarSuscripcion] = useState(false);
+  // Ref para el formulario de suscripción y scroll automático en móvil
+  const formRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (mostrarSuscripcion && formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [mostrarSuscripcion]);
+
   // Función para generar y descargar un PDF con todas las imágenes de un anuncio
   const handleDescargar = async (imagenes: string[]) => {
     const doc = new jsPDF();
@@ -151,7 +159,7 @@ const Anuncios: React.FC = () => {
 
         {/* Formulario de suscripción */}
         {mostrarSuscripcion && (
-          <div className="max-w-md mx-auto mb-12 bg-white/95 rounded-2xl p-6 shadow-lg">
+          <div ref={formRef} className="max-w-md mx-auto mb-12 bg-white/95 rounded-2xl p-6 shadow-lg">
             <h3 className="text-xl font-bold text-olive-green mb-4 text-center">Recibe Notificaciones Gratuitas</h3>
             <p className="text-gray-600 text-sm mb-4 text-center">
               Te enviaremos un email cada vez que publiquemos un nuevo anuncio importante.
